@@ -1,17 +1,11 @@
-TalkingStick.Partner = (function(self) {
-  var peerConnection;
+TalkingStick.Partner = function() {
+  this.peerConnection = new RTCPeerConnection();
+}
 
-  self.init = function() {
-    self.peerConnection = new RTCPeerConnection();
-  };
+TalkingStick.Partner.prototype.setDescription = function(answer) {
+  this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+};
 
-  self.setDescription = function(answer) {
-    self.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-  };
-
-  self.handleIceCandidate = function(candidate) {
-    self.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
-  };
-
-  return self;
-})(TalkingStick.Partner || {});
+TalkingStick.Partner.prototype.handleIceCandidate = function(candidate) {
+  this.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
+};

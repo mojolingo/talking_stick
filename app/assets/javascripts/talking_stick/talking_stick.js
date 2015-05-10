@@ -1,10 +1,12 @@
 var TalkingStick = (function(self) {
   var options;
+  var init = false;
 
-  self.init = function(options) {
-    // TODO: Validate all required options are present
-    self.options = options;
-    self.partners = [];
+  self.init = function(force) {
+    if (!self.init || force === true) {
+      self.partners = [];
+      self.init = true;
+    }
   };
   
   self.errorCallback = function(error) {
@@ -12,6 +14,7 @@ var TalkingStick = (function(self) {
   };
   
   self.start = function() {
+    self.init();
     navigator.getUserMedia(this.options.requestMedia, function(stream) {
       attachMediaStream(this.options.localVideo, stream)
     }, self.errorCallback);
@@ -20,8 +23,8 @@ var TalkingStick = (function(self) {
   
   self.addPeer = function() {
     partner = new TalkingStick.Partner();
-    partner.init();
     partners.push(partner);
+    return partner;
   };
 
   return self;
