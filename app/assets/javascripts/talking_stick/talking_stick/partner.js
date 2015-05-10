@@ -9,7 +9,7 @@ TalkingStick.Partner = (function(self) {
     self.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
   };
 
-  self.handleIceCandidate = function(candidate)
+  self.handleIceCandidate = function(candidate) {
     self.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
   };
 
