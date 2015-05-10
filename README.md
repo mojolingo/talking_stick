@@ -40,6 +40,10 @@ $ rake railties:install:migrations db:migrate
 * Rails app notifies all room participants when one joins or leaves
 * Rails app proxies call setup between participants in each room
 
+## TODO
+
+* Add rake task to copy view files to app for easy overriding
+
 ## The Name
 
 The [Talking Stick] is a tradition among Native American (and other) cultures which specifies a simple yet effective way for facilitating group conversations. For more, see the [Wikipedia Article](https://en.wikipedia.org/wiki/Talking_stick), or this insightful blog post by [Rich Goidel](http://www.dangerouskitchen.com/shut-up-and-listen/).
