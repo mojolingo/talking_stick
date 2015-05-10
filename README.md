@@ -10,11 +10,28 @@ This gem provides basic [WebRTC](https://webrtc.org) communication in any Rails 
 * Pluggable signaling delivery technology
 * Plug & Play functionality - works out of the box
 
-## Limitations
+## Installation
 
-1. Only works with a single Rails process
-This is due to the default push technology of Server Sent Events. Each client is connected to the Rails server persistently and is listening for events about the room to which it is subscribed. If you have two Rails servers, there's no way to know which server has a given client's SSE connection. To work around this limitation, you will need to replace the default push mechanism with something that scales better.
+TalkingStick is built as a Rails Engine, and so follows those conventions.
 
+1. Add to Gemfile and update bundle
+```Ruby
+gem 'talking_stick'
+```
+
+Now run `bundle install` to download the gem.
+
+2. Mount the engine
+Add the following to your application's `config/routes.rb`:
+```Ruby
+mount TalkingStick::Engine, at: '/talking_stick'
+```
+
+3. Install and Run migrations
+To add the required models to your application, the migrations must be copied and run:
+```
+$ rake railties:install:migrations db:migrate
+```
 
 ## How it works
 
