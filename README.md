@@ -12,6 +12,8 @@ This gem provides basic [WebRTC](https://webrtc.org) communication in any Rails 
 
 ## Installation
 
+Note that TalkingStick requires jQuery, and installs [jquery-rails gem](https://github.com/rails/jquery-rails) as a dependency.
+
 TalkingStick is built as a Rails Engine, and so follows those conventions.
 
 1. Add to Gemfile and update bundle

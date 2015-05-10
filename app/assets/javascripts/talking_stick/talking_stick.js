@@ -9,14 +9,17 @@ var TalkingStick = (function(self) {
 
     self.partners = [];
 
+    var localVideo = $(self._options.localVideo);
+
     // Ensure video streams play as soon as they are attached
-    self._options.localVideo.setAttribute('autoplay', true);
+    localVideo.attr('autoplay', true);
 
     // Prevent local audio feedback
-    self._options.localVideo.setAttribute('muted', true);
+    localVideo.attr('muted', true);
 
     navigator.getUserMedia(self._options.media, function(stream) {
-      attachMediaStream(self._options.localVideo, stream)
+      // The JS API requires the raw DOM element, not a jQuery wrapper
+      attachMediaStream(localVideo[0], stream)
     }, self.errorCallback);
   };
   
