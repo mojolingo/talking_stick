@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = TalkingStick::VERSION
   s.authors     = ['Ben Klang']
   s.email       = ['bklang@mojolingo.com']
-  s.homepage    = 'TODO'
-  s.summary     = 'TODO: Summary of TalkingStick.'
-  s.description = 'TODO: Description of TalkingStick.'
+  s.homepage    = 'https://github.com/mojolingo/talking_stick'
+  s.summary     = 'Easy group-based video conversations with WebRTC'
+  s.description = 'TalkingStick is a Rails Engine that provides easy group-based video conversations, all thanks to the power of WebRTC.'
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
