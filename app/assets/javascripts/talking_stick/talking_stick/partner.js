@@ -1,4 +1,8 @@
-TalkingStick.Partner = function() {
+TalkingStick.Partner = function(options) {
+  var _options = {
+    videoEl: undefined, // Set this to the DOM element where video should be rendered
+  };
+  for (var attr in options) { self._options[attr] = options[attr]; }
   this.peerConnection = new RTCPeerConnection();
 }
 
