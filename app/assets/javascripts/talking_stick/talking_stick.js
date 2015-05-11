@@ -11,6 +11,10 @@ var TalkingStick = (function(self) {
     self.GUID = self.generateGUID();
     self.partners = [];
 
+    self.setupLocalVideo();
+  };
+
+  self.setupLocalVideo = function() {
     var localVideo = $(self._options.localVideo);
 
     // Ensure video streams play as soon as they are attached
@@ -21,7 +25,8 @@ var TalkingStick = (function(self) {
 
     navigator.getUserMedia(self._options.media, function(stream) {
       // The JS API requires the raw DOM element, not a jQuery wrapper
-      attachMediaStream(localVideo[0], stream)
+      attachMediaStream(localVideo[0], stream);
+
       // Tell the server we're ready to start contacting the other participants
       var data = {
         participant: {
