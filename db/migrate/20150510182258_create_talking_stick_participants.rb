@@ -3,7 +3,8 @@ class CreateTalkingStickParticipants < ActiveRecord::Migration
     create_table :talking_stick_participants do |t|
       t.string :name
       t.string :ip
-      t.string :guid
+      t.string :guid, index: true
+      t.timestamp :last_seen
       t.belongs_to :room, index: true
 
       t.timestamps null: false
