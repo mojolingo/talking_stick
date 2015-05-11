@@ -1,4 +1,5 @@
 var TalkingStick = (function(self) {
+  self.GUID = undefined;
   self._options = {
     media: { audio: true, video: true },
     localVideo: undefined, // Set this to the DOM element where video should be rendered
@@ -7,6 +8,7 @@ var TalkingStick = (function(self) {
   self.init = function(options) {
     for (var attr in options) { self._options[attr] = options[attr]; }
 
+    self.GUID = self.generateGUID();
     self.partners = [];
 
     var localVideo = $(self._options.localVideo);
@@ -32,6 +34,16 @@ var TalkingStick = (function(self) {
     partners.push(partner);
     return partner;
   };
+
+  self.generateGUID = function () {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+  }
 
   return self;
 }(TalkingStick || {}));
