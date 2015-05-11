@@ -45,6 +45,7 @@ $ rake railties:install:migrations db:migrate
 ## TODO
 
 * Add rake task to copy view files to app for easy overriding
+* Add heartbeat to GC stale room participants
 
 ## The Name
 

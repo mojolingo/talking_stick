@@ -1,4 +1,5 @@
 TalkingStick::Engine.routes.draw do
-  resources :rooms
-  resources :participants
+  resources :rooms do
+    resources :participants
+  end
 end
