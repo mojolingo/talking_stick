@@ -22,6 +22,13 @@ var TalkingStick = (function(self) {
     navigator.getUserMedia(self._options.media, function(stream) {
       // The JS API requires the raw DOM element, not a jQuery wrapper
       attachMediaStream(localVideo[0], stream)
+      // Tell the server we're ready to start contacting the other participants
+      var data = {
+        participant: {
+          guid: self.GUID,
+        }
+      }
+      $.post(self._options.roomurl + '/participants.json', data)
     }, self.errorCallback);
   };
   
