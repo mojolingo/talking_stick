@@ -1,9 +1,10 @@
-TalkingStick.Partner = function(options) {
+TalkingStick.Partner = function(guid, peerConnection, options) {
   var _options = {
     videoEl: undefined, // Set this to the DOM element where video should be rendered
   };
-  for (var attr in options) { self._options[attr] = options[attr]; }
-  this.peerConnection = new RTCPeerConnection();
+  $.extend(self._options, options);
+  this.guid           = guid;
+  this.peerConnection = peerConnection;
 }
 
 TalkingStick.Partner.prototype.setDescription = function(answer) {

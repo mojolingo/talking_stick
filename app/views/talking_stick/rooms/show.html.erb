@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @room.name %>
+</p>
+
+<p>
+  <strong>Last used:</strong>
+  <%= @room.last_used %>
+</p>
+
+<video id="localvideo"></video>
+
+<%= link_to 'Edit', edit_room_path(@room) %> |
+<%= link_to 'Back', rooms_path %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  var options = {
+    localVideo: $('#localvideo'),
+    roomurl: '<%= room_path(@room) %>',
+  }
+  TalkingStick.init(options);
+  
+});
+</script>

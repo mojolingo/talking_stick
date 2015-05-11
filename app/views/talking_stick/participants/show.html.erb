@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @participant.name %>
+</p>
+
+<p>
+  <strong>Ip:</strong>
+  <%= @participant.ip %>
+</p>
+
+<%= link_to 'Edit', edit_room_participant_path(@room, @participant) %> |
+<%= link_to 'Back', room_participants_path %>

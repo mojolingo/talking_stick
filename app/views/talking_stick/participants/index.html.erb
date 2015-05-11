@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Participants</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Ip</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @participants.each do |participant| %>
+      <tr>
+        <td><%= participant.name %></td>
+        <td><%= participant.ip %></td>
+        <td><%= link_to 'Show', [@room, participant] %></td>
+        <td><%= link_to 'Edit', edit_room_participant_path(@room, participant) %></td>
+        <td><%= link_to 'Destroy', [@room, participant], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Participant', new_room_participant_path(@room) %>
