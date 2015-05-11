@@ -46,6 +46,7 @@ $ rake railties:install:migrations db:migrate
 ## TODO
 
 * Add rake task to copy view files to app for easy overriding
+* Figure out strategy for electing initiators (Participants that generate an "offer") and responders (Participants that generate an "answer")
 
 ## The Name
 
