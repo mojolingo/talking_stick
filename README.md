@@ -9,6 +9,7 @@ This gem provides basic [WebRTC](https://webrtc.org) communication in any Rails 
 * Allow selecting audio or audio+video
 * Pluggable signaling delivery technology
 * Plug & Play functionality - works out of the box
+* Focus on simplicity at the API level, while maximizing the possibilites of integrating communication into existing Rails apps
 
 ## Installation
 
