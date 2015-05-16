@@ -59,9 +59,7 @@ var TalkingStick = (function(self) {
         return;
       }
 
-      var pc = self.newPeerConnection();
-      var partner = self.addPartner(guid, pc);
-
+      var partner = self.addPartner(participant.guid);
     });
 
   };
@@ -107,21 +105,14 @@ var TalkingStick = (function(self) {
     console.error(error);
   };
   
-  self.addPartner = function(guid, pc, options) {
-    partner = new TalkingStick.Partner(guid, pc, options);
+  self.addPartner = function(guid) {
     self.log('debug', 'Adding new partner with guid', guid, 'to this conversation');
+    partner = new TalkingStick.Partner(guid, options);
     self.partners[guid] = (partner);
     return partner;
   };
 
-  self.newPeerConnection = function() {
-    var pc = new RTCPeerConnection();
-    pc.onicecandidate = function(event) {
-      // TODO: Need to transmite candidates
-    };
 
-    pc.addStream(self.myStream);
-    // TODO: Finish this!
   };
 
   self.generateGUID = function () {

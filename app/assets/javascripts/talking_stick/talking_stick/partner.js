@@ -1,10 +1,11 @@
-TalkingStick.Partner = function(guid, peerConnection, options) {
-  var _options = {
-    videoEl: undefined, // Set this to the DOM element where video should be rendered
+TalkingStick.Partner = function(guid, options) {
+  this.guid          = guid;
+  this._options      = {
+    videoElement: undefined, // Set this to the DOM element where video should be rendered
   };
-  $.extend(self._options, options);
-  this.guid           = guid;
-  this.peerConnection = peerConnection;
+  $.extend(this._options, options);
+}
+
 TalkingStick.Partner.prototype.log = function() {
   var level = arguments[0];
   var args = Array.prototype.slice.call(arguments, 1);
@@ -20,4 +21,11 @@ TalkingStick.Partner.prototype.setDescription = function(answer) {
 
 TalkingStick.Partner.prototype.handleIceCandidate = function(candidate) {
   this.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
+TalkingStick.Partner.prototype.connect = function(stream) {
+  this.log('trace', 'Creating new peer connection');
+  this.peerConnection = new RTCPeerConnection();
+  this.peerConnection.onicecandidate = this.handleICECandidate;
+
+  this.peerConnection.addStream(stream);
+  // TODO: Finish this!
 };
