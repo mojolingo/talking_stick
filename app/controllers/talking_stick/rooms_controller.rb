@@ -13,17 +13,23 @@ module TalkingStick
     # GET /rooms/1
     def show
       if params[:guid]
-        if participant = Participant.where(guid: params[:guid]).first
-          participant.last_seen = Time.now
-          participant.save
+        if @participant = Participant.where(guid: params[:guid]).first
+          @participant.last_seen = Time.now
+          @participant.save
         end
       end
 
       Participant.remove_stale! @room
 
+      response = {
+        room: @room,
+        participants: @room.participants,
+        signals: get_signals!,
+      }
+
       respond_to do |format|
         format.html
-        format.json { render json: @room, include: :participants }
+        format.json { render json: response }
       end
     end
 
@@ -95,10 +101,29 @@ module TalkingStick
       head 204
     end
 
+    def get_signals!
+      data = TalkingStick::Signal.where recipient: @participant
+
+      # Destroy the signals as we return them, since they have been delivered
+      result = []
+      data.each do |signal|
+        result << {
+          signal_type: signal.signal_type,
+          sender_guid: signal.sender_guid,
+          recipient_guid: signal.recipient_guid,
+          data: signal.data,
+          room_id: signal.room_id,
+          timestamp: signal.created_at,
+        }
+      end
+      data.delete_all
+      result
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_room
-        @room = Room.find(params[:id])
+        @room = Room.find(params[:id] || params[:room_id])
       end
 
       def set_participant

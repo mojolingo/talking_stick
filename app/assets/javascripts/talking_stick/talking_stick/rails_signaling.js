@@ -23,7 +23,7 @@ TalkingStick.RailsSignaling.prototype.iceCandidateGatheringComplete = function(t
   var data = {
     signal_type: 'candidates',
     recipient: to,
-    data: candidates,
+    data: JSON.stringify(candidates),
   }
   this._sendData('ICE Candidates', data);
 }
@@ -32,7 +32,7 @@ TalkingStick.RailsSignaling.prototype.sendOffer = function(to, offer) {
   var data = {
     signal_type: 'offer',
     recipient: to,
-    data: offer,
+    data: JSON.stringify(offer),
   }
   this._sendData('Offer', data);
 }
@@ -41,7 +41,7 @@ TalkingStick.RailsSignaling.prototype.sendAnswer = function(to, answer) {
   var data = {
     signal_type: 'answer',
     recipient: to,
-    data: answer,
+    data: JSON.stringify(answer),
   }
   this._sendData('Answer', data);
 }
