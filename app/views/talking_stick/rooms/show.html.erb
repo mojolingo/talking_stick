@@ -17,11 +17,13 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  var myGUID = TalkingStick.generateGUID();
   var options = {
+    GUID: myGUID,
     localVideo: $('#localvideo'),
     roomURL: '<%= room_path(@room) %>',
     logLevel: 'trace',
-  }
+  };
   TalkingStick.init(options);
   
 });
