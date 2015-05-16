@@ -47,29 +47,6 @@ var TalkingStick = (function(self) {
     }
   }
 
-  self.updateParticipants = function(data, textStatus, jqXHR) {
-    $.each(data.participants, function(i, participant) {
-      if (participant.guid == self.guid) {
-        // Don't try to set up a connection to ourself
-        return;
-      }
-
-      if (self.partners[participant.guid]) {
-        // We already have a connection to this participant
-        return;
-      }
-
-      var partner = self.addPartner(participant);
-      partner.connect(self.myStream);
-      if (partner.registerTime < self.registerTime) {
-        // Send Offers to partners who joined before us.
-        // Expect partners who join after us to send us Offers.
-        partner.sendOffer();
-      }
-    });
-
-  };
-
   self.setupLocalVideo = function() {
     var localVideo = $(self._options.localVideo);
 
@@ -89,27 +66,14 @@ var TalkingStick = (function(self) {
           guid: self.guid,
         }
       }
-      $.post(self._options.roomURL + '/participants.json', data)
+      $.post(self._options.roomUrl + '/participants.json', data)
       .success(function(data) {
-        self.checkForParticipants();
-        // Schedule a timer to check for other participants
-        // TODO: Make this pluggable
-        setInterval(self.checkForParticipants, 3000);
         self.joinedAt = new Date(data.joined_at);
+        self.signalingEngine.connected();
       })
-      .fail(function() { self._ajaxErrorLog('Error registering as a participant', arguments) });
+      .fail(function() { self.ajaxErrorLog('Error registering as a participant', arguments) });
 
     }, self.errorCallback);
-  };
-
-  self.checkForParticipants = function() {
-    self.log('trace', 'Checking for updated participants list');
-    var options = {
-      data: { guid: self.guid },
-      success: self.updateParticipants,
-    }
-    $.ajax(self._options.roomURL + '.json', options)
-    .fail(function() { self._ajaxErrorLog('Error checking for participants', arguments) });
   };
   
   self.errorCallback = function(error) {
@@ -131,6 +95,16 @@ var TalkingStick = (function(self) {
 
     partner = new TalkingStick.Partner(participant, options);
     self.partners[participant.guid] = partner;
+
+    partner.connect(self.myStream);
+
+    if (partner.joinedAt < TalkingStick.joinedAt) {
+      self.log('trace', 'Sending Offer to', partner.guid);
+      // Send Offers to partners who joined before us.
+      // Expect partners who join after us to send us Offers.
+      partner.sendOffer();
+    }
+
     return partner;
   };
 
@@ -154,7 +128,7 @@ var TalkingStick = (function(self) {
       s4() + '-' + s4() + s4() + s4();
   };
 
-  self._ajaxErrorLog = function(message, ajaxFailArgs) {
+  self.ajaxErrorLog = function(message, ajaxFailArgs) {
     // ajaxFailArgs: 0: jqXHR; 1: textStatus; 2: errorThrown
     self.log('error', message + ':', ajaxFailArgs[2]);
   }

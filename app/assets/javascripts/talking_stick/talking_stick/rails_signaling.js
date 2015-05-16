@@ -1,6 +1,17 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
-  this.url = options.url + '/participants/' + options.myGuid + '/signaling';
+  this.guid = options.myGuid;
+  this.roomUrl = options.url;
+  this.signalingUrl = options.url + '/participants/' + options.myGuid + '/signaling';
+}
+
+TalkingStick.RailsSignaling.prototype.connected = function() {
+  // Check now, then schedule a timer to check for new participants
+  this._checkForParticipants();
+  var signaling = this;
+  setInterval(function() {
+    signaling._checkForParticipants.apply(signaling);
+  }, 3000);
 }
 
 TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate) {
@@ -36,7 +47,51 @@ TalkingStick.RailsSignaling.prototype.sendAnswer = function(to, answer) {
 }
 
 TalkingStick.RailsSignaling.prototype._sendData = function(descr, data) {
-  $.post(this.url, data)
+  $.post(this.signalingUrl, data)
   .success(function() { TalkingStick.log('trace', descr + ' sent to API'); })
   .fail(function(jqXHR, textStatus, error) { TalkingStick.log('error', 'Error sending ' + descr + ' to API:', error) });
 }
+
+TalkingStick.RailsSignaling.prototype._checkForParticipants = function() {
+  TalkingStick.log('trace', 'Getting room updates');
+  var options = {
+    data: { guid: this.guid },
+  }
+
+  var signaling = this;
+  $.ajax(this.roomUrl + '.json', options)
+  .success(function() { signaling._handleRoomUpdate.apply(signaling, arguments); })
+  .fail(function() { TalkingStick.ajaxErrorLog('Error checking for participants', arguments) });
+};
+
+TalkingStick.RailsSignaling.prototype._updateParticipants = function(participants) {
+  $.each(participants, function(i, participant) {
+    if (participant.guid === TalkingStick.guid) {
+      // Don't try to set up a connection to ourself
+      //TalkingStick.log('trace', 'Skipping own GUID', participant.guid);
+      return;
+    }
+
+    if (TalkingStick.partners[participant.guid]) {
+      // We already have a connection to this participant
+      //TalkingStick.log('trace', 'Skipping participant since we already have a connection', participant.guid);
+      return;
+    }
+    TalkingStick.log('trace', 'Handling new partner', participant.guid);
+
+    TalkingStick.addPartner(participant);
+  });
+};
+
+TalkingStick.RailsSignaling.prototype._processSignals = function(signals) {
+  $.each(signals, function(i, signal) {
+    TalkingStick.log('trace', 'Received signal', signal);
+    signal_data = JSON.parse(signal.data);
+  });
+};
+
+TalkingStick.RailsSignaling.prototype._handleRoomUpdate = function(data, textStatus, jqXHR) {
+  this._updateParticipants(data.participants);
+  this._processSignals(data.signals);
+};
+
