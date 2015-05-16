@@ -1,6 +1,7 @@
 var TalkingStick = (function(self) {
-  self.guid     = undefined;
-  self.myStream = undefined;
+  self.guid         = undefined;
+  self.myStream     = undefined;
+  self.registerTime = undefined;
   self._options = {
     media: { audio: true, video: true },
     localVideo: undefined, // Set this to the DOM element where video should be rendered
@@ -57,7 +58,7 @@ var TalkingStick = (function(self) {
         return;
       }
 
-      var partner = self.addPartner(participant.guid);
+      var partner = self.addPartner(participant);
     });
 
   };
@@ -105,16 +106,16 @@ var TalkingStick = (function(self) {
     self.log('error', error);
   };
   
-  self.addPartner = function(guid) {
-    self.log('debug', 'Adding new partner with guid', guid, 'to this conversation');
+  self.addPartner = function(participant) {
+    self.log('debug', 'Adding new partner to this conversation', participant);
     var partnerVideo = document.createElement('video');
     self.prepareVideoElement(partnerVideo);
     var options = {
       videoElement: partnerVideo,
     }
 
-    partner = new TalkingStick.Partner(guid, options);
-    self.partners[guid] = (partner);
+    partner = new TalkingStick.Partner(participant, options);
+    self.partners[participant.guid] = partner;
     return partner;
   };
 
