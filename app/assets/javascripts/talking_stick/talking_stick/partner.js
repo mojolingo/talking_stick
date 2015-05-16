@@ -7,6 +7,7 @@ TalkingStick.Partner = function(participant, options) {
     videoElement: undefined, // Set this to the DOM element where video should be rendered
   };
   $.extend(this._options, options);
+  this.signalingEngine = this._options.signalingEngine;
 }
 
 TalkingStick.Partner.prototype.log = function() {

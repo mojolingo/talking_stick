@@ -22,6 +22,7 @@ var TalkingStick = (function(self) {
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
     self.guid = self._options.guid || self.generateGUID();
+    self.signalingEngine = self._options.signalingEngine;
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
   };
@@ -112,6 +113,7 @@ var TalkingStick = (function(self) {
     self.prepareVideoElement(partnerVideo);
     var options = {
       videoElement: partnerVideo,
+      signalingEngine: self.signalingEngine,
     }
 
     partner = new TalkingStick.Partner(participant, options);
