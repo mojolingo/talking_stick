@@ -88,6 +88,7 @@ var TalkingStick = (function(self) {
     self.log('debug', 'Adding new partner to this conversation', participant);
     var partnerVideo = document.createElement('video');
     self.prepareVideoElement(partnerVideo);
+    $('#partnerVideos').append(partnerVideo);
     var options = {
       videoElement: partnerVideo,
       signalingEngine: self.signalingEngine,

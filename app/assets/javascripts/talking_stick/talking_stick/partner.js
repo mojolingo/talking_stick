@@ -2,12 +2,13 @@ TalkingStick.Partner = function(participant, options) {
   this.gatheringCandidates = false;
   this.guid          = participant.guid;
   this.joinedAt      = new Date(participant.joined_at);
-  this.iceCandidates = [];
+  this.localICECandidates = [];
   this._options      = {
     videoElement: undefined, // Set this to the DOM element where video should be rendered
   };
   $.extend(this._options, options);
   this.signalingEngine = this._options.signalingEngine;
+  this.videoElement    = this._options.videoElement;
 }
 
 TalkingStick.Partner.prototype.log = function() {
@@ -36,7 +37,7 @@ TalkingStick.Partner.prototype.connect = function(stream) {
 
   var partner = this;
   this.peerConnection.onicecandidate = function() {
-    partner.handleICECandidate.apply(partner, arguments);
+    partner.handleLocalICECandidate.apply(partner, arguments);
   }
 
   this.peerConnection.addStream(stream);
@@ -51,21 +52,49 @@ TalkingStick.Partner.prototype.sendOffer = function() {
     partner.peerConnection.setLocalDescription(offer);
     partner.signalingEngine.sendOffer(partner.guid, offer);
   }, this.errorCallback);
-}
+};
 
-TalkingStick.Partner.prototype.handleICECandidate = function(event) {
+TalkingStick.Partner.prototype.handleOffer = function(offer) {
+  this.log('debug', 'Processing Offer received from', this.guid);
+  this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+  var partner = this;
+
+  this.peerConnection.onaddstream = function(event) {
+    attachMediaStream($(partner.videoElement)[0], event.stream);
+  };
+  this.peerConnection.createAnswer(function(answer) {
+    partner.peerConnection.setLocalDescription(new RTCSessionDescription(answer));
+    partner.log('debug', 'Sending Answer to', partner.guid);
+    partner.signalingEngine.sendAnswer(partner.guid, answer);
+  });
+};
+
+TalkingStick.Partner.prototype.handleAnswer = function(answer) {
+  this.log('debug', 'Processing Answer received from', this.guid);
+  var partner = this;
+  this.peerConnection.onaddstream = function(event) {
+    attachMediaStream($(partner.videoElement)[0], event.stream);
+  };
+  this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+};
+
+TalkingStick.Partner.prototype.handleRemoteICECandidate = function(candidate) {
+  this.log('trace', 'Adding remote ICE candidate', candidate);
+  this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+};
+
+TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
   var candidate = event.candidate;
   if (candidate) {
-    this.log('trace', 'Received ICE candidate', candidate);
-    this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    this.log('trace', 'Discovered local ICE candidate', candidate);
     // Store and transmit new ICE candidate
-    this.iceCandidates.push(event.candidate);
+    this.localICECandidates.push(event.candidate);
     this.signalingEngine.sendICECandidate(this.guid, event.candidate);
 
   } else {
     this.gatheringCandidates = false;
     this.log('debug', 'ICE candidate collection complete');
-    this.signalingEngine.iceCandidateGatheringComplete(this.guid, this.iceCandidates);
+    this.signalingEngine.iceCandidateGatheringComplete(this.guid, this.localICECandidates);
   }
 };
 

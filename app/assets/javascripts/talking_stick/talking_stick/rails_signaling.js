@@ -87,6 +87,30 @@ TalkingStick.RailsSignaling.prototype._processSignals = function(signals) {
   $.each(signals, function(i, signal) {
     TalkingStick.log('trace', 'Received signal', signal);
     signal_data = JSON.parse(signal.data);
+
+    var partner = TalkingStick.partners[signal.sender_guid];
+    if (partner === undefined) {
+      TalkingStick.log('warning', 'Received signal from unknown partner ' + signal.sender_guid + '; ignoring.');
+      return;
+    }
+
+    switch(signal.signal_type) {
+    case 'offer':
+      partner.handleOffer(signal_data);
+      break;
+    case 'answer':
+      partner.handleAnswer(signal_data);
+      break;
+    case 'candidates':
+      $.each(signal_data, function(i, candidate) {
+
+        partner.handleRemoteICECandidate(candidate);
+      });
+      break;
+    default:
+      TalkingStick.log('warning', 'Unknown signal type "' + signal.signal_type + '" received.', signal);
+      break;
+    };
   });
 };
 

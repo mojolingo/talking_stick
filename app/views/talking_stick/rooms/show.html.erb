@@ -11,6 +11,7 @@
 </p>
 
 <video id="localvideo"></video>
+<div id="partnerVideos"></div>
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>
@@ -30,7 +31,7 @@ $(document).ready(function() {
     localVideo: $('#localvideo'),
     roomUrl: '<%= room_path %>',
     signalingEngine: signalingEngine,
-    logLevel: 'trace',
+    logLevel: 'debug',
   };
   TalkingStick.init(options);
   
