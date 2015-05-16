@@ -1,5 +1,7 @@
 TalkingStick.Partner = function(guid, options) {
+  this.gatheringCandidates = false;
   this.guid          = guid;
+  this.iceCandidates = [];
   this._options      = {
     videoElement: undefined, // Set this to the DOM element where video should be rendered
   };
@@ -19,13 +21,27 @@ TalkingStick.Partner.prototype.setDescription = function(answer) {
   this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 };
 
-TalkingStick.Partner.prototype.handleIceCandidate = function(candidate) {
-  this.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
 TalkingStick.Partner.prototype.connect = function(stream) {
   this.log('trace', 'Creating new peer connection');
+  this.gatheringCandidates = true;
   this.peerConnection = new RTCPeerConnection();
   this.peerConnection.onicecandidate = this.handleICECandidate;
 
   this.peerConnection.addStream(stream);
   // TODO: Finish this!
 };
+
+TalkingStick.Partner.prototype.handleICECandidate = function(event) {
+  var candidate = event.candidate;
+  if (candidate) {
+    this.log('trace', 'Received ICE candidate', candidate);
+    this.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
+    // Store and transmit new ICE candidate
+    this.iceCandidates.push(event.candidate);
+
+  } else {
+    this.gatheringCandidates = false;
+    this.log('trace', 'ICE candidate collection complete');
+  }
+};
+
