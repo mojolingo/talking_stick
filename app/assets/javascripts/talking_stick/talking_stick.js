@@ -96,9 +96,9 @@ var TalkingStick = (function(self) {
     var options = {
       data: { guid: self.guid },
       success: self.updateParticipants,
-      error: self.errorCallback
     }
-    $.ajax(self._options.roomURL + '.json', options);
+    $.ajax(self._options.roomURL + '.json', options)
+    .fail(function() { self._ajaxErrorLog('Error checking for participants', arguments) });
   };
   
   self.errorCallback = function(error) {
@@ -137,6 +137,11 @@ var TalkingStick = (function(self) {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
       s4() + '-' + s4() + s4() + s4();
   };
+
+  self._ajaxErrorLog = function(message, ajaxFailArgs) {
+    // ajaxFailArgs: 0: jqXHR; 1: textStatus; 2: errorThrown
+    self.log('error', message + ':', ajaxFailArgs[2]);
+  }
 
   return self;
 }(TalkingStick || {}));
