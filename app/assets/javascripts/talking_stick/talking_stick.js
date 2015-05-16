@@ -102,7 +102,7 @@ var TalkingStick = (function(self) {
   };
   
   self.errorCallback = function(error) {
-    console.error(error);
+    self.log('error', error);
   };
   
   self.addPartner = function(guid) {
