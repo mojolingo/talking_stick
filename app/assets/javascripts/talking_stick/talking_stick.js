@@ -16,7 +16,7 @@ var TalkingStick = (function(self) {
   ];
 
   self.init = function(options) {
-    for (var attr in options) { self._options[attr] = options[attr]; }
+    $.extend(self._options, options);
 
     self.GUID = self.generateGUID();
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
