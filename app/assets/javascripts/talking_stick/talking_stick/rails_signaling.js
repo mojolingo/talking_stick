@@ -1,6 +1,5 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
-  this.guid = options.myGuid;
   this.roomUrl = options.url;
   this.signalingUrl = options.url + '/participants/' + options.myGuid + '/signaling';
 }
@@ -55,7 +54,7 @@ TalkingStick.RailsSignaling.prototype._sendData = function(descr, data) {
 TalkingStick.RailsSignaling.prototype._checkForParticipants = function() {
   TalkingStick.log('trace', 'Getting room updates');
   var options = {
-    data: { guid: this.guid },
+    data: { guid: TalkingStick.guid },
   }
 
   var signaling = this;
