@@ -3,6 +3,7 @@ require_dependency "talking_stick/application_controller"
 module TalkingStick
   class RoomsController < ApplicationController
     before_action :set_room, only: [:show, :edit, :update, :destroy]
+    before_action :set_participant, only: [:signaling]
 
     # GET /rooms
     def index
@@ -85,10 +86,21 @@ module TalkingStick
       head 204
     end
 
+    def signaling
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_room
         @room = Room.find(params[:id])
+      end
+
+      def set_participant
+        @participant = Participant.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        # Retry with ID as GUID
+        @participant = Participant.where(guid: params[:id]).first
+        raise unless @participant
       end
 
       # Only allow a trusted parameter "white list" through.
