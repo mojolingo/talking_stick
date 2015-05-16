@@ -21,8 +21,6 @@ var TalkingStick = (function(self) {
     self.GUID = self.generateGUID();
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
-    setInterval(self.checkForParticipants, 3000);
-
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
   };
@@ -88,6 +86,12 @@ var TalkingStick = (function(self) {
         }
       }
       $.post(self._options.roomURL + '/participants.json', data)
+
+      self.checkForParticipants();
+
+      // Schedule a timer to check for other participants
+      setInterval(self.checkForParticipants, 3000);
+
     }, self.errorCallback);
   };
 
