@@ -89,7 +89,7 @@ var TalkingStick = (function(self) {
           guid: self.GUID,
         }
       }
-      $.post(self._options.roomurl + '/participants.json', data)
+      $.post(self._options.roomURL + '/participants.json', data)
     }, self.errorCallback);
   };
 
@@ -100,7 +100,7 @@ var TalkingStick = (function(self) {
       success: self.updateParticipants,
       error: self.errorCallback
     }
-    $.ajax(self._options.roomurl + '.json', options);
+    $.ajax(self._options.roomURL + '.json', options);
   };
   
   self.errorCallback = function(error) {
