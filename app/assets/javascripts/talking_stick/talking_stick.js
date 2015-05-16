@@ -18,9 +18,9 @@ var TalkingStick = (function(self) {
   self.init = function(options) {
     $.extend(self._options, options);
 
-    self.GUID = self.generateGUID();
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
+    self.GUID = self.generateGUID();
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
   };
