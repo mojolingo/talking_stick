@@ -33,7 +33,7 @@ TalkingStick.RailsSignaling.prototype.sendAnswer = function(to, answer) {
 }
 
 TalkingStick.RailsSignaling.prototype._sendData = function(descr, data) {
-  $.post(this.options.url, data)
+  $.post(this.url, data)
   .success(function() { TalkingStick.log('trace', descr + ' sent to API'); })
   .fail(function(err) { TalkingStick.log('error', 'Error sending ' + descr + ' to API', err) });
 }
