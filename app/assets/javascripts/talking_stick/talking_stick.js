@@ -1,5 +1,5 @@
 var TalkingStick = (function(self) {
-  self.GUID     = undefined;
+  self.guid     = undefined;
   self.myStream = undefined;
   self._options = {
     media: { audio: true, video: true },
@@ -20,7 +20,7 @@ var TalkingStick = (function(self) {
 
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
-    self.GUID = self._options.GUID || self.generateGUID();
+    self.guid = self._options.guid || self.generateGUID();
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
   };
@@ -47,7 +47,7 @@ var TalkingStick = (function(self) {
 
   self.updateParticipants = function(data, textStatus, jqXHR) {
     $.each(data.participants, function(i, participant) {
-      if (participant.guid == self.GUID) {
+      if (participant.guid == self.guid) {
         // Don't try to set up a connection to ourself
         return;
       }
@@ -78,7 +78,7 @@ var TalkingStick = (function(self) {
       // Tell the server we're ready to start contacting the other participants
       var data = {
         participant: {
-          guid: self.GUID,
+          guid: self.guid,
         }
       }
       $.post(self._options.roomURL + '/participants.json', data)
@@ -94,7 +94,7 @@ var TalkingStick = (function(self) {
   self.checkForParticipants = function() {
     self.log('debug', 'Checking for updated participants list');
     var options = {
-      data: { guid: self.GUID },
+      data: { guid: self.guid },
       success: self.updateParticipants,
       error: self.errorCallback
     }

@@ -1,6 +1,6 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
-  this.url = options.url + '/participants/' + options.myGUID + '/signaling';
+  this.url = options.url + '/participants/' + options.myGuid + '/signaling';
 }
 
 TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate) {
