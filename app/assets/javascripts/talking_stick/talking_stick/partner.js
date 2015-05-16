@@ -5,9 +5,16 @@ TalkingStick.Partner = function(guid, peerConnection, options) {
   $.extend(self._options, options);
   this.guid           = guid;
   this.peerConnection = peerConnection;
+TalkingStick.Partner.prototype.log = function() {
+  var level = arguments[0];
+  var args = Array.prototype.slice.call(arguments, 1);
+  args.unshift('[Partner ' + this.guid + ']');
+  args.unshift(level);
+  TalkingStick.log.apply(this, args);
 }
 
 TalkingStick.Partner.prototype.setDescription = function(answer) {
+  this.log('trace', 'Setting remote description to', answer);
   this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 };
 

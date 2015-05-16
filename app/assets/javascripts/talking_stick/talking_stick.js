@@ -4,17 +4,48 @@ var TalkingStick = (function(self) {
   self._options = {
     media: { audio: true, video: true },
     localVideo: undefined, // Set this to the DOM element where video should be rendered
+    logLevel: 'error',
   };
+
+  self.logLevels = [
+    'trace',
+    'debug',
+    'notice',
+    'warning',
+    'error',
+  ];
 
   self.init = function(options) {
     for (var attr in options) { self._options[attr] = options[attr]; }
 
     self.GUID = self.generateGUID();
+    self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
     setInterval(self.checkForParticipants, 3000);
 
     self.setupLocalVideo();
+    self.log('notice', 'TalkingStick initialized.');
   };
+
+  self.log = function() {
+    var level = arguments[0];
+    var levelIdx = self.logLevels.indexOf(level);
+    if (levelIdx >= self.logLevelIdx) {
+      var args = Array.prototype.slice.call(arguments, 1);
+      args.unshift('[' + level + ']');
+      switch(levelIdx) {
+      case 4:
+        console.error.apply(console, args);
+        break;
+      case 3:
+        console.warn.apply(console, args);
+        break;
+      default:
+        console.log.apply(console, args);
+        break;
+      }
+    }
+  }
 
   self.updateParticipants = function(data, textStatus, jqXHR) {
     $.each(data.participants, function(i, participant) {
@@ -44,7 +75,9 @@ var TalkingStick = (function(self) {
     // Prevent local audio feedback
     localVideo.attr('muted', true);
 
+    self.log('debug', 'Requesting user consent to access to input devices');
     navigator.getUserMedia(self._options.media, function(stream) {
+      self.log('debug', 'User has granted access to input devices');
       self.myStream = stream;
 
       // The JS API requires the raw DOM element, not a jQuery wrapper
@@ -61,6 +94,7 @@ var TalkingStick = (function(self) {
   };
 
   self.checkForParticipants = function() {
+    self.log('debug', 'Checking for updated participants list');
     var options = {
       data: { guid: self.GUID },
       success: self.updateParticipants,
@@ -75,6 +109,7 @@ var TalkingStick = (function(self) {
   
   self.addPartner = function(guid, pc, options) {
     partner = new TalkingStick.Partner(guid, pc, options);
+    self.log('debug', 'Adding new partner with guid', guid, 'to this conversation');
     self.partners[guid] = (partner);
     return partner;
   };
