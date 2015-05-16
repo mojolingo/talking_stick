@@ -60,6 +60,12 @@ var TalkingStick = (function(self) {
       }
 
       var partner = self.addPartner(participant);
+      partner.connect(self.myStream);
+      if (partner.registerTime < self.registerTime) {
+        // Send Offers to partners who joined before us.
+        // Expect partners who join after us to send us Offers.
+        partner.sendOffer();
+      }
     });
 
   };

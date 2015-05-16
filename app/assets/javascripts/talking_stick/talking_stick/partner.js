@@ -32,25 +32,40 @@ TalkingStick.Partner.prototype.setDescription = function(answer) {
 
 TalkingStick.Partner.prototype.connect = function(stream) {
   this.log('trace', 'Creating new peer connection');
-  this.gatheringCandidates = true;
   this.peerConnection = new RTCPeerConnection();
-  this.peerConnection.onicecandidate = this.handleICECandidate;
+
+  var partner = this;
+  this.peerConnection.onicecandidate = function() {
+    partner.handleICECandidate.apply(partner, arguments);
+  }
 
   this.peerConnection.addStream(stream);
-  // TODO: Finish this!
 };
+
+TalkingStick.Partner.prototype.sendOffer = function() {
+  // Fix scope for "this" inside createOffer()
+  var partner = this;
+  this.peerConnection.createOffer(function(offer) {
+    partner.log('trace', 'Created PeerConnection Offer; ICE candidate collection starting', offer);
+    partner.gatheringCandidates = true;
+    partner.peerConnection.setLocalDescription(offer);
+    partner.signalingEngine.sendOffer(partner.guid, offer);
+  }, this.errorCallback);
+}
 
 TalkingStick.Partner.prototype.handleICECandidate = function(event) {
   var candidate = event.candidate;
   if (candidate) {
     this.log('trace', 'Received ICE candidate', candidate);
-    this.peerConnection.addIceCandidate(new RTCIceCandidate({candidate: candidate}));
+    this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
     // Store and transmit new ICE candidate
     this.iceCandidates.push(event.candidate);
+    this.signalingEngine.sendICECandidate(this.guid, event.candidate);
 
   } else {
     this.gatheringCandidates = false;
-    this.log('trace', 'ICE candidate collection complete');
+    this.log('debug', 'ICE candidate collection complete');
+    this.signalingEngine.iceCandidateGatheringComplete(this.guid, this.iceCandidates);
   }
 };
 

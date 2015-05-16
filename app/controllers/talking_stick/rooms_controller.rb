@@ -87,6 +87,8 @@ module TalkingStick
     end
 
     def signaling
+      # TODO: Save the ICE details in the database for other partners to retrieve
+      head 204
     end
 
     private
