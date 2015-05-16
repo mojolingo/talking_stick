@@ -65,11 +65,7 @@ var TalkingStick = (function(self) {
   self.setupLocalVideo = function() {
     var localVideo = $(self._options.localVideo);
 
-    // Ensure video streams play as soon as they are attached
-    localVideo.attr('autoplay', true);
-
-    // Prevent local audio feedback
-    localVideo.attr('muted', true);
+    self.prepareVideoElement(localVideo);
 
     self.log('debug', 'Requesting user consent to access to input devices');
     navigator.getUserMedia(self._options.media, function(stream) {
@@ -111,12 +107,25 @@ var TalkingStick = (function(self) {
   
   self.addPartner = function(guid) {
     self.log('debug', 'Adding new partner with guid', guid, 'to this conversation');
+    var partnerVideo = document.createElement('video');
+    self.prepareVideoElement(partnerVideo);
+    var options = {
+      videoElement: partnerVideo,
+    }
+
     partner = new TalkingStick.Partner(guid, options);
     self.partners[guid] = (partner);
     return partner;
   };
 
+  self.prepareVideoElement = function(el) {
+    el = $(el);
 
+    // Ensure video streams play as soon as they are attached
+    el.attr('autoplay', true);
+
+    // Prevent local audio feedback
+    el.attr('muted', true);
   };
 
   self.generateGUID = function () {
