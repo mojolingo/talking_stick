@@ -17,16 +17,16 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  var myGUID = TalkingStick.generateGUID();
+  var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
   var options = {
     url: '<%= room_path %>',
-    myGUID: myGUID,
+    myGuid: myGuid,
   };
   var signalingEngine = new TalkingStick.RailsSignaling(options);
 
   var options = {
-    GUID: myGUID,
+    guid: myGuid,
     localVideo: $('#localvideo'),
     roomURL: '<%= room_path %>',
     signalingEngine: signalingEngine,
