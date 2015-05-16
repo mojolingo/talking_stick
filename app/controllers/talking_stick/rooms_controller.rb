@@ -96,10 +96,10 @@ module TalkingStick
       end
 
       def set_participant
-        @participant = Participant.find(params[:id])
+        @participant = Participant.find(params[:participant_id])
       rescue ActiveRecord::RecordNotFound
         # Retry with ID as GUID
-        @participant = Participant.where(guid: params[:id]).first
+        @participant = Participant.where(guid: params[:participant_id]).first
         raise unless @participant
       end
 
