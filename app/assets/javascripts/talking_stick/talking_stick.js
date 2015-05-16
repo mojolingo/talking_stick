@@ -84,11 +84,14 @@ var TalkingStick = (function(self) {
         }
       }
       $.post(self._options.roomURL + '/participants.json', data)
-
-      self.checkForParticipants();
-
-      // Schedule a timer to check for other participants
-      setInterval(self.checkForParticipants, 3000);
+      .success(function(data) {
+        self.registerTime = new Date(data.created_at);
+        self.checkForParticipants();
+        // Schedule a timer to check for other participants
+        // TODO: Make this pluggable
+        setInterval(self.checkForParticipants, 3000);
+      })
+      .fail(function() { self._ajaxErrorLog('Error registering as a participant', arguments) });
 
     }, self.errorCallback);
   };
