@@ -10,24 +10,27 @@ TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate)
 
 TalkingStick.RailsSignaling.prototype.iceCandidateGatheringComplete = function(to, candidates) {
   var data = {
-    to: to,
-    candidates: candidates,
+    signal_type: 'candidates',
+    recipient: to,
+    data: candidates,
   }
   this._sendData('ICE Candidates', data);
 }
 
 TalkingStick.RailsSignaling.prototype.sendOffer = function(to, offer) {
   var data = {
-    to: to,
-    offer: offer,
+    signal_type: 'offer',
+    recipient: to,
+    data: offer,
   }
   this._sendData('Offer', data);
 }
 
 TalkingStick.RailsSignaling.prototype.sendAnswer = function(to, answer) {
   var data = {
-    to: to,
-    answer: answer,
+    signal_type: 'answer',
+    recipient: to,
+    data: answer,
   }
   this._sendData('Answer', data);
 }

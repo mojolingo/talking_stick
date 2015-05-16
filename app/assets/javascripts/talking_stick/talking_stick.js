@@ -103,7 +103,7 @@ var TalkingStick = (function(self) {
   };
 
   self.checkForParticipants = function() {
-    self.log('debug', 'Checking for updated participants list');
+    self.log('trace', 'Checking for updated participants list');
     var options = {
       data: { guid: self.guid },
       success: self.updateParticipants,

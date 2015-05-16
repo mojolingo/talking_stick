@@ -2,7 +2,7 @@ require_dependency "talking_stick/application_controller"
 
 module TalkingStick
   class RoomsController < ApplicationController
-    before_action :set_room, only: [:show, :edit, :update, :destroy]
+    before_action :set_room, only: [:show, :edit, :update, :destroy, :signaling]
     before_action :set_participant, only: [:signaling]
 
     # GET /rooms
@@ -87,7 +87,11 @@ module TalkingStick
     end
 
     def signaling
-      # TODO: Save the ICE details in the database for other partners to retrieve
+      signal = signal_params
+      signal[:room] = @room
+      signal[:sender] = @participant
+      signal[:recipient] = Participant.where(guid: signal[:recipient]).first
+      TalkingStick::Signal.create! signal
       head 204
     end
 
@@ -108,6 +112,10 @@ module TalkingStick
       # Only allow a trusted parameter "white list" through.
       def room_params
         params.require(:room).permit(:name, :last_used)
+      end
+
+      def signal_params
+        params.permit(:recipient, :signal_type, :data)
       end
   end
 end
