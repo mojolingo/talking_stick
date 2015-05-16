@@ -16,6 +16,13 @@ TalkingStick.Partner.prototype.log = function() {
   TalkingStick.log.apply(this, args);
 }
 
+TalkingStick.Partner.prototype.errorCallback = function() {
+  // Convert arguments to a real array
+  var args = Array.prototype.slice.call(arguments);
+  args.unshift('error');
+  this.log(args);
+}
+
 TalkingStick.Partner.prototype.setDescription = function(answer) {
   this.log('trace', 'Setting remote description to', answer);
   this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
