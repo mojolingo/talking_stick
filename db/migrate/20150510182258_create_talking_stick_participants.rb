@@ -4,6 +4,7 @@ class CreateTalkingStickParticipants < ActiveRecord::Migration
       t.string :name
       t.string :ip
       t.string :guid, index: true
+      t.timestamp :joined_at
       t.timestamp :last_seen
       t.belongs_to :room, index: true
 

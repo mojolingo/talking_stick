@@ -1,7 +1,7 @@
 var TalkingStick = (function(self) {
   self.guid         = undefined;
   self.myStream     = undefined;
-  self.registerTime = undefined;
+  self.joinedAt     = undefined;
   self._options = {
     media: { audio: true, video: true },
     localVideo: undefined, // Set this to the DOM element where video should be rendered
@@ -91,11 +91,11 @@ var TalkingStick = (function(self) {
       }
       $.post(self._options.roomURL + '/participants.json', data)
       .success(function(data) {
-        self.registerTime = new Date(data.created_at);
         self.checkForParticipants();
         // Schedule a timer to check for other participants
         // TODO: Make this pluggable
         setInterval(self.checkForParticipants, 3000);
+        self.joinedAt = new Date(data.joined_at);
       })
       .fail(function() { self._ajaxErrorLog('Error registering as a participant', arguments) });
 
@@ -116,6 +116,10 @@ var TalkingStick = (function(self) {
     self.log('error', error);
   };
   
+  /*
+   * participant.guid
+   * participant.joined_at
+   */
   self.addPartner = function(participant) {
     self.log('debug', 'Adding new partner to this conversation', participant);
     var partnerVideo = document.createElement('video');

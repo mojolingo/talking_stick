@@ -1,7 +1,7 @@
 TalkingStick.Partner = function(participant, options) {
   this.gatheringCandidates = false;
   this.guid          = participant.guid;
-  this.registerTime  = new Date(participant.created_at);
+  this.joinedAt      = new Date(participant.joined_at);
   this.iceCandidates = [];
   this._options      = {
     videoElement: undefined, // Set this to the DOM element where video should be rendered
