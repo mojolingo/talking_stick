@@ -102,7 +102,6 @@ TalkingStick.RailsSignaling.prototype._processSignals = function(signals) {
       break;
     case 'candidates':
       $.each(signal_data, function(i, candidate) {
-
         partner.handleRemoteICECandidate(candidate);
       });
       break;
