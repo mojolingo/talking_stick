@@ -1,6 +1,6 @@
 # TalkingStick
 
-This gem provides basic [WebRTC](https://webrtc.org) communication in any Rails app.
+This gem provides easy [WebRTC](https://webrtc.org) communication in any Rails app.
 
 
 ## Goals
