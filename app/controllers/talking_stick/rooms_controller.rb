@@ -68,30 +68,6 @@ module TalkingStick
       redirect_to rooms_url, notice: 'Room was successfully destroyed.'
     end
 
-    def get_session_descriptions
-    end
-
-    # POST /rooms/1/session_description
-    # This is how a participant sends a media description to another participant
-    def post_session_description
-      @sender    = Participant.where(sender_guid: params[:sender_guid]).first
-      @recipient = Participant.where(recipient_guid: params[:recipient_guid]).first
-      unless @sender && @recipient
-        head 400
-        return
-      end
-
-      # Check to see if there is an existing session to update
-      @descr = SessionDescription.where(room_id: @room.id, sender_id: @sender.id, recipient_id: @recipient.id).first
-      @descr ||= SessionDescription.new
-
-      @descr.description = params[:description]
-
-      @descr.save!
-
-      head 204
-    end
-
     def signaling
       signal = signal_params
       signal[:room] = @room
