@@ -1,15 +1,14 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
   this.roomUrl = options.url;
-  this.signalingUrl = options.url + '/participants/' + options.myGuid + '/signaling';
 }
 
 TalkingStick.RailsSignaling.prototype.connected = function() {
   // Check now, then schedule a timer to check for new participants
-  this._checkForParticipants();
+  this._updateRoom();
   var signaling = this;
   setInterval(function() {
-    signaling._checkForParticipants.apply(signaling);
+    signaling._updateRoom.apply(signaling);
   }, 3000);
 }
 
@@ -21,37 +20,36 @@ TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate)
 TalkingStick.RailsSignaling.prototype.iceCandidateGatheringComplete = function(to, candidates) {
   var data = {
     signal_type: 'candidates',
-    recipient: to,
     data: JSON.stringify(candidates),
   }
-  this._sendData('ICE Candidates', data);
+  this._sendData('ICE Candidates', to, data);
 }
 
 TalkingStick.RailsSignaling.prototype.sendOffer = function(to, offer) {
   var data = {
     signal_type: 'offer',
-    recipient: to,
     data: JSON.stringify(offer),
   }
-  this._sendData('Offer', data);
+  this._sendData('Offer', to, data);
 }
 
 TalkingStick.RailsSignaling.prototype.sendAnswer = function(to, answer) {
   var data = {
     signal_type: 'answer',
-    recipient: to,
     data: JSON.stringify(answer),
   }
-  this._sendData('Answer', data);
+  this._sendData('Answer', to, data);
 }
 
-TalkingStick.RailsSignaling.prototype._sendData = function(descr, data) {
-  $.post(this.signalingUrl, data)
+TalkingStick.RailsSignaling.prototype._sendData = function(descr, toGuid, data) {
+  data.sender = TalkingStick.guid;
+  var signalUrl = this.roomUrl + '/participants/' + toGuid + '/signals';
+  $.post(signalUrl, data)
   .success(function() { TalkingStick.log('trace', descr + ' sent to API'); })
   .fail(function(jqXHR, textStatus, error) { TalkingStick.log('error', 'Error sending ' + descr + ' to API:', error) });
 }
 
-TalkingStick.RailsSignaling.prototype._checkForParticipants = function() {
+TalkingStick.RailsSignaling.prototype._updateRoom = function() {
   TalkingStick.log('trace', 'Getting room updates');
   var options = {
     data: { guid: TalkingStick.guid },

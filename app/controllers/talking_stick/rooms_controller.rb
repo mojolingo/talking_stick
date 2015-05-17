@@ -2,8 +2,8 @@ require_dependency "talking_stick/application_controller"
 
 module TalkingStick
   class RoomsController < ApplicationController
-    before_action :set_room, only: [:show, :edit, :update, :destroy, :signaling]
-    before_action :set_participant, only: [:signaling]
+    before_action :set_room, only: [:show, :edit, :update, :destroy, :signal]
+    before_action :set_participant, only: [:signal]
 
     # GET /rooms
     def index
@@ -24,7 +24,7 @@ module TalkingStick
       response = {
         room: @room,
         participants: @room.participants,
-        signals: get_signals!,
+        signals: deliver_signals!,
       }
 
       respond_to do |format|
@@ -68,16 +68,16 @@ module TalkingStick
       redirect_to rooms_url, notice: 'Room was successfully destroyed.'
     end
 
-    def signaling
+    def signal
       signal = signal_params
       signal[:room] = @room
-      signal[:sender] = @participant
-      signal[:recipient] = Participant.where(guid: signal[:recipient]).first
+      signal[:sender] = Participant.where(guid: signal[:sender]).first
+      signal[:recipient] = @participant
       TalkingStick::Signal.create! signal
       head 204
     end
 
-    def get_signals!
+    def deliver_signals!
       data = TalkingStick::Signal.where recipient: @participant
 
       # Destroy the signals as we return them, since they have been delivered
@@ -116,7 +116,7 @@ module TalkingStick
       end
 
       def signal_params
-        params.permit(:recipient, :signal_type, :data)
+        params.permit(:sender, :signal_type, :data)
       end
   end
 end
