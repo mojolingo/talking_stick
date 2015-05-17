@@ -17,28 +17,30 @@ Note that TalkingStick requires jQuery, and installs [jquery-rails gem](https://
 
 TalkingStick is built as a Rails Engine, and so follows those conventions.
 
-1. Add to Gemfile and update bundle
-```Ruby
-gem 'talking_stick'
-```
+1. Add to Gemfile and update the bundle
 
-Now run `bundle install` to download the gem.
+    ```Ruby
+    gem 'talking_stick'
+    ```
 
+    Now run `bundle install` to download and install the gem.
 2. Mount the engine
-Add the following to your application's `config/routes.rb`:
-```Ruby
-mount TalkingStick::Engine, at: '/talking_stick'
-```
+    Add the following to your application's `config/routes.rb`:
 
-3. Install and Run migrations
-To add the required models to your application, the migrations must be copied and run:
-```
-$ rake railties:install:migrations db:migrate
-```
+    ```Ruby
+    mount TalkingStick::Engine, at: '/talking_stick'
+    ```
+3. Install and Run migration
+    To add the required models to your application, the migrations must be copied and run:
+    ```
+    $ rake railties:install:migrations db:migrate
+    ```
+4. Videconference!
+    After booting Rails, point your browser to something like [http://localhost:3000/talking_stick/rooms](http://localhost:3000/talking_stick/rooms). From there you will be able to create and join rooms.
 
 ## How it works
 
-* Each group is assigned a unique ID
+* Each room is assigned a unique ID
 * Rails app keeps track of participants in each room
 * Rails app notifies all room participants when one joins or leaves
 * Rails app proxies call setup between participants in each room
@@ -47,15 +49,17 @@ $ rake railties:install:migrations db:migrate
 
 One of the critical decisions made by the standards bodies behind WebRTC was a decision to leave the signaling of WebRTC up to the application. This means that an application may use any means it desires to give the endpoints the data necessary to communicate directly.
 
-This plugin tries to be "batteries included", which means that we included a signaling mechanism that will work on any Rails server. As such, we could not rely on any particular push technology, such as Websockets or long polling. Thus, the default behavior is that the browser polls the Rails API for updates on connected peers. This works fine for small user bases, but obviously will not scale well.
+This plugin tries to be "batteries included", which means that we included a signaling mechanism that will work on any Rails server. As such, we could not rely on any particular push technology, such as Websockets or Server Sent Events. Thus, the default behavior is that the browser polls the Rails API for updates on connected peers. This works fine for small user bases, but obviously will not scale well.
 
 ### Want help designing and deploying an efficient, scalable signaling mechanism for your application?
-[Contact Mojo Lingo](https://mojolingo.com/connect) today! As authors of this Gem, Mojo Lingo can help you get the most value out of WebRTC by integrating communications into your application and business processes.
+[Contact Mojo Lingo](https://mojolingo.com/connect) today! As authors of this Gem, Mojo Lingo are experts in Real-Time Communications Applications. We can help you get the most value out of WebRTC by integrating communications into your application and business processes, and scale it to very large groups. [Learn more.](https://mojolingo.com)
 
+
+### Building Your Own Signaling Engine
 
 Alternatively, you can build your own by passing a "Signaling Engine" to the TalkingStick class.
 
-The [reference Signaling Engine](https://github.com/mojolingo/talking_stick/blob/master/app/assets/javascripts/talking_stick/talking_stick/rails_signaling.js) periodically polls the Rails API for signals, but can be replaced with any API-compatible implementation, including Websockets, XMPP, or anything you like.
+The [reference Signaling Engine](https://github.com/mojolingo/talking_stick/blob/master/app/assets/javascripts/talking_stick/talking_stick/rails_signaling.js) periodically polls the Rails API for signals, but can be replaced with any API-compatible implementation, including Websockets, XMPP, or anything else you like.
 
 The Signaling Engine must implement the following methods. For each method where `guid` is specified, it represents the ID of the remote participant to which the information must be sent.
 
@@ -84,8 +88,7 @@ This function returns an instance of `TalkingStick.Partner`.
 
 * `TalkingStick.Partner.handleOffer(offer)` Pass in offer received from a Partner
 * `TalkingStick.Partner.handleAnswer(answer)` Pass in an answer received from a Partner
-* `TalkingStick.Partner.handleRemoteICECandidate(RTCIceCandidate)` Pass ICE candidates received from remote Partners in to instances of `TalkingStick.Partner`
-
+* `TalkingStick.Partner.handleRemoteICECandidate(RTCIceCandidate)` Pass in ICE candidates received from remote Partners
 
 
 ### Additional Methods
@@ -95,11 +98,11 @@ This function returns an instance of `TalkingStick.Partner`.
 
 ## TODO
 
-See the [Pivotal Tracker story board](https://www.pivotaltracker.com/n/projects/1343190)
+See the [Pivotal Tracker story board](https://www.pivotaltracker.com/n/projects/1343190).  Contributions welcome!
 
 ## The Name
 
-The [Talking Stick] is a tradition among Native American (and other) cultures which specifies a simple yet effective way for facilitating group conversations. For more, see the [Wikipedia Article](https://en.wikipedia.org/wiki/Talking_stick), or this insightful blog post by [Rich Goidel](http://www.dangerouskitchen.com/shut-up-and-listen/).
+The Talking Stick is a tradition among Native American (and other) cultures which specifies a simple yet effective way for facilitating group conversations. For more, see the [Wikipedia Article](https://en.wikipedia.org/wiki/Talking_stick), or this insightful blog post by [Rich Goidel](http://www.dangerouskitchen.com/shut-up-and-listen/).
 
 ## Credits & Copyright
 
@@ -108,4 +111,5 @@ The [Talking Stick] is a tradition among Native American (and other) cultures wh
 This project is licensed under the MIT License. This project incorporates [Adapter.js from the WebRTC.org team](https://github.com/webrtc/adapter), which is licensed under the Apache license.
 
 Copyright 2015 Mojo Lingo LLC
+
 Portions copyright 2014 The WebRTC project authors
