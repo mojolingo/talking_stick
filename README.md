@@ -65,6 +65,34 @@ The Signaling Engine must implement the following methods. For each method where
 * `sendOffer(guid, offer)`: Called when the local browser wants to initiate an offer to a remote party.
 * `sendAnswer(guid, answer)`: Called when the local browser wants to respond to a received offer.
 
+The Signaling Engine will also need to use the following methods to add new Partners to the conversation:
+
+* `TalkingStick.addPartner(partner)`
+
+```javascript
+var partner = {
+  guid: 'GloballyUniqueIdentifierForThisParter-Session',
+  joined_at: Date
+}
+```
+
+The `guid` should be unique not only for the remote participant, but also his connection into this session. If a single participant were to join two different rooms on the same server (for example), he would need two separate GUIDs, one for each room.
+
+The `joined_at` field signifies the date & time that the remote Participant joined the room. It is important that the `joined_at` Date object be provided by the remote party to avoid race conditions. The `joined_at` field is used internally by TalkingStick to manage the sequence of offers & answers.
+
+This function returns an instance of `TalkingStick.Partner`.
+
+* `TalkingStick.Partner.handleOffer(offer)` Pass in offer received from a Partner
+* `TalkingStick.Partner.handleAnswer(answer)` Pass in an answer received from a Partner
+* `TalkingStick.Partner.handleRemoteICECandidate(RTCIceCandidate)` Pass ICE candidates received from remote Partners in to instances of `TalkingStick.Partner`
+
+
+
+### Additional Methods
+
+* `TalkingStick.parters` The collection of `TalkingStick.Partners` to whom the local session is currently connected. Treat it as read-only.
+* `TalkingStick.log(level, obj[, obj ...])` Allows messages to be conditionally logged to the console. Valid levels are strings, and may be one of `trace`, `debug`, `notice`, `warning`, or `error`.
+
 ## TODO
 
 See the [Pivotal Tracker story board](https://www.pivotaltracker.com/n/projects/1343190)
