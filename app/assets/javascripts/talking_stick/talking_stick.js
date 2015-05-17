@@ -95,6 +95,7 @@ var TalkingStick = (function(self) {
     var options = {
       videoElement: partnerVideo,
       signalingEngine: self.signalingEngine,
+      iceServers: self._options.iceServers,
     }
 
     partner = new TalkingStick.Partner(participant, options);

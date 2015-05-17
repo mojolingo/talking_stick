@@ -32,8 +32,11 @@ TalkingStick.Partner.prototype.setDescription = function(answer) {
 };
 
 TalkingStick.Partner.prototype.connect = function(stream) {
-  this.log('trace', 'Creating new peer connection');
-  this.peerConnection = new RTCPeerConnection();
+  var configuration = {
+    iceServers: this._options.iceServers,
+  };
+  this.log('trace', 'Creating new peer connection with configuration', configuration);
+  this.peerConnection = new RTCPeerConnection(configuration);
 
   var partner = this;
   this.peerConnection.onicecandidate = function() {
