@@ -69,7 +69,7 @@ TalkingStick.Partner.prototype.handleOffer = function(offer) {
     partner.peerConnection.setLocalDescription(new RTCSessionDescription(answer));
     partner.log('debug', 'Sending Answer to', partner.guid);
     partner.signalingEngine.sendAnswer(partner.guid, answer);
-  });
+  }, this.errorCallback);
 };
 
 TalkingStick.Partner.prototype.handleAnswer = function(answer) {
