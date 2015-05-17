@@ -6,8 +6,7 @@
 </p>
 
 <p>
-  <strong>Last used:</strong>
-  <%= @room.last_used %>
+  <button id="connect">Connect to room</button>
 </p>
 
 <video id="localvideo"></video>
@@ -34,6 +33,8 @@ $(document).ready(function() {
     logLevel: 'debug',
   };
   TalkingStick.init(options);
+
+  $('#connect').click(TalkingStick.connect);
   
 });
 </script>

@@ -59,22 +59,25 @@ var TalkingStick = (function(self) {
 
       // The JS API requires the raw DOM element, not a jQuery wrapper
       attachMediaStream(localVideo[0], stream);
-
-      // Tell the server we're ready to start contacting the other participants
-      var data = {
-        participant: {
-          guid: self.guid,
-        }
-      }
-      $.post(self._options.roomUrl + '/participants.json', data)
-      .success(function(data) {
-        self.joinedAt = new Date(data.joined_at);
-        self.signalingEngine.connected();
-      })
-      .fail(function() { self.ajaxErrorLog('Error registering as a participant', arguments) });
-
     }, self.errorCallback);
   };
+
+  self.connect = function() {
+    // Tell the server we're ready to start contacting the other participants
+    var data = {
+      participant: {
+        guid: self.guid,
+      }
+    }
+    $.post(self._options.roomUrl + '/participants.json', data)
+    .success(function(data) {
+      self.log('notice', 'TalkingStock connected to the room.');
+      self.joinedAt = new Date(data.joined_at);
+      self.signalingEngine.connected();
+    })
+    .fail(function() { self.ajaxErrorLog('Error joining the room', arguments) });
+  };
+
   
   self.errorCallback = function(error) {
     self.log('error', error);
