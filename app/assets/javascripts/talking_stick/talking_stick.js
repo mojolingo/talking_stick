@@ -71,7 +71,7 @@ var TalkingStick = (function(self) {
     }
     $.post(self._options.roomUrl + '/participants.json', data)
     .success(function(data) {
-      self.log('notice', 'TalkingStock connected to the room.');
+      self.log('notice', 'TalkingStick connected to the room.');
       self.joinedAt = new Date(data.joined_at);
       self.signalingEngine.connected();
     })
