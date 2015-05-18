@@ -45,7 +45,9 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
 * Rails app notifies all room participants when one joins or leaves
 * Rails app proxies call setup between participants in each room
 
-## Providing your own signaling mechanism
+## Extending TalkingStick
+
+### Providing your own signaling mechanism
 
 One of the critical decisions made by the standards bodies behind WebRTC was a decision to leave the signaling of WebRTC up to the application. This means that an application may use any means it desires to give the endpoints the data necessary to communicate directly.
 
@@ -95,6 +97,11 @@ This function returns an instance of `TalkingStick.Partner`.
 
 * `TalkingStick.parters` The collection of `TalkingStick.Partners` to whom the local session is currently connected. Treat it as read-only.
 * `TalkingStick.log(level, obj[, obj ...])` Allows messages to be conditionally logged to the console. Valid levels are strings, and may be one of `trace`, `debug`, `notice`, `warning`, or `error`.
+
+### Events
+
+* `talking_stick.local_media_setup`: (no arguments) Triggered after local media has been initialized and drawn to the configured element
+* TODO: Document the rest of the events
 
 ## TODO
 

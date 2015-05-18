@@ -1,6 +1,8 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
   this.roomUrl = options.url;
+  var self = this;
+  $(document).on('talking_stick.connected', function() { self.connected.apply(self)} );
 }
 
 TalkingStick.RailsSignaling.prototype.connected = function() {

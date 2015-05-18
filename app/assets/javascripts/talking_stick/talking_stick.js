@@ -22,6 +22,7 @@ var TalkingStick = (function(self) {
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
     self.guid = self._options.guid || self.generateGUID();
+    self.localVideo = $(self._options.localVideo);
     self.signalingEngine = self._options.signalingEngine;
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
@@ -47,10 +48,20 @@ var TalkingStick = (function(self) {
     }
   }
 
-  self.setupLocalVideo = function() {
-    var localVideo = $(self._options.localVideo);
+  self.trigger = function(name) {
+    name = 'talking_stick.' + name;
+    args = Array.prototype.slice.call(arguments, 1);
+    // Syntactic sugar: make it easy to pass a list of args as the only argument
+    // This is the "right way" per
+    // http://stackoverflow.com/questions/4775722/check-if-object-is-array
+    if (args.length == 1 && Object.prototype.toString.call(args[0]) === '[object Array]') {
+      args = args[0];
+    }
+    self.localVideo.trigger(name, args);
+  }
 
-    self.prepareVideoElement(localVideo);
+  self.setupLocalVideo = function() {
+    self.prepareVideoElement(self.localVideo);
 
     self.log('debug', 'Requesting user consent to access to input devices');
     navigator.getUserMedia(self._options.media, function(stream) {
@@ -58,7 +69,9 @@ var TalkingStick = (function(self) {
       self.myStream = stream;
 
       // The JS API requires the raw DOM element, not a jQuery wrapper
-      attachMediaStream(localVideo[0], stream);
+      attachMediaStream(self.localVideo[0], stream);
+
+      self.trigger('local_media_setup');
     }, self.errorCallback);
   };
 
@@ -73,16 +86,16 @@ var TalkingStick = (function(self) {
     .success(function(data) {
       self.log('notice', 'TalkingStick connected to the room.');
       self.joinedAt = new Date(data.joined_at);
-      self.signalingEngine.connected();
+      self.trigger('connected');
     })
     .fail(function() { self.ajaxErrorLog('Error joining the room', arguments) });
   };
 
-  
+
   self.errorCallback = function(error) {
     self.log('error', error);
   };
-  
+
   /*
    * participant.guid
    * participant.joined_at

@@ -9,6 +9,7 @@ TalkingStick.Partner = function(participant, options) {
   $.extend(this._options, options);
   this.signalingEngine = this._options.signalingEngine;
   this.videoElement    = this._options.videoElement;
+  TalkingStick.trigger('partner.created', this);
 }
 
 TalkingStick.Partner.prototype.log = function() {
@@ -22,6 +23,7 @@ TalkingStick.Partner.prototype.log = function() {
 TalkingStick.Partner.prototype.errorCallback = function() {
   // Convert arguments to a real array
   var args = Array.prototype.slice.call(arguments);
+  TalkingStick.trigger('partner.error', args);
   args.unshift('error');
   this.log(args);
 }
@@ -63,7 +65,7 @@ TalkingStick.Partner.prototype.handleOffer = function(offer) {
   var partner = this;
 
   this.peerConnection.onaddstream = function(event) {
-    attachMediaStream($(partner.videoElement)[0], event.stream);
+    this._attachMediaStream(event.stream);
   };
   this.peerConnection.createAnswer(function(answer) {
     partner.peerConnection.setLocalDescription(new RTCSessionDescription(answer));
@@ -76,7 +78,7 @@ TalkingStick.Partner.prototype.handleAnswer = function(answer) {
   this.log('debug', 'Processing Answer received from', this.guid);
   var partner = this;
   this.peerConnection.onaddstream = function(event) {
-    attachMediaStream($(partner.videoElement)[0], event.stream);
+    this._attachMediaStream(event.stream);
   };
   this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 };
@@ -100,4 +102,9 @@ TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
     this.signalingEngine.iceCandidateGatheringComplete(this.guid, this.localICECandidates);
   }
 };
+
+TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
+  attachMediaStream($(partner.videoElement)[0], event.stream);
+  TalkingStick.trigger('partner.media', partner.videoElement, event.stream);
+}
 
