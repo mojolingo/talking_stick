@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+
+#localvideo.video {
+  width: 100%;
+}
+
+#partnervideos .video {
+  float: left;
+  padding: 1em;
+}

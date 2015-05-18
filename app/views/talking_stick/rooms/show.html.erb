@@ -1,16 +1,31 @@
-<p id="notice"><%= notice %></p>
+<% content_for(:title) { "#{@room.name} Group Conversation" } %>
+<div class="container-fluid" role="main">
+  <div class="row">
+    <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @room.name %>
-</p>
+    <p>
+      <strong><%= t(:name) %></strong>
+      <%= @room.name %>
+    </p>
 
-<p>
-  <button id="connect">Connect to room</button>
-</p>
+    <p>
+      <button id="connect"><%= t(:join) %></button>
+      <button id="sim"><%= t(:sim) %></button>
+    </p>
+  </div>
 
-<video id="localvideo"></video>
-<div id="partnerVideos"></div>
+  <div class="row">
+    <div class="col-xs-5 col-md-4 col-lg-3">
+      <img id="localvideo" class="video" src="<%= image_path 'video.png' %>"/>
+      <!-- <video id="localvideo"></video> -->
+    </div>
+    <div id="partnervideos" class="col-xs-7 col-md-8 col-lg-9">
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>
@@ -36,5 +51,21 @@ $(document).ready(function() {
 
   $('#connect').click(TalkingStick.connect);
   
+});
+
+$(window).on('talking_stick.partner.media', function() {
+  var numVideos = $('#partnervideos .video').length;
+  var videoCollection = $('#partnervideos .video');
+  var tiling = 1;
+  if (numVideos == 1 || $(window).width() < 768) {
+    videoCollection.css('max-width', '100%');
+  } else {
+    videoCollection.css('max-width', '50%');
+    tiling = 2;
+  }
+
+  if ($(window).height() < $('#partnervideos').height()) {
+    videoCollection.css('max-height', $(window).height() / (numVideos/tiling));
+  }
 });
 </script>
