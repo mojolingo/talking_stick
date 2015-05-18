@@ -6,6 +6,7 @@ var TalkingStick = (function(self) {
     media: { audio: true, video: true },
     localVideo: undefined, // Set this to the DOM element where video should be rendered
     logLevel: 'error',
+    iceServers: [],
   };
 
   self.logLevels = [
