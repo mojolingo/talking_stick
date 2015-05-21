@@ -14,11 +14,12 @@
  *= require_self
  */
 
-#localvideo.video {
+#localvideo {
   width: 100%;
 }
 
-#partnervideos .video {
+#partnervideos video {
   float: left;
   padding: 1em;
+}
 }
