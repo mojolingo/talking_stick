@@ -1,3 +1,8 @@
 it:
-  name: Nome
+  destroy: Distruggere
+  edit: Modifica
   last_used: Ultimo Uso
+  listing_rooms: Lista Camere
+  name: Nome
+  new_room: Creo Camere
+  show: Mostrare
