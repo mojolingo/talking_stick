@@ -66,23 +66,18 @@ $(document).ready(function() {
   $('#connect').click(startSession);
 });
 
-$(window).on('talking_stick.partner.media', function() {
-  var numVideos = $('#partnervideos .video').length;
-  var videoCollection = $('#partnervideos .video');
-  var tiling = 1;
-  if (numVideos == 1 || $(window).width() < 768) {
-    videoCollection.css('max-width', '100%');
-  } else {
-    videoCollection.css('max-width', '50%');
-    tiling = 2;
-  }
 function startSession() {
   $('#localvideo').detach().appendTo('#localvideo-container');
   TalkingStick.connect();
 };
 
-  if ($(window).height() < $('#partnervideos').height()) {
-    videoCollection.css('max-height', $(window).height() / (numVideos/tiling));
-  }
-});
+function resizeVideos() {
+  var videoCollection = $('#partnervideos video');
+  var numVideos = videoCollection.length;
+  videoCollection.css('width', (100/numVideos) + "%");
+};
+
+
+$(window).on('talking_stick.partner.media', resizeVideos);
+$(window).resize(resizeVideos);
 </script>
