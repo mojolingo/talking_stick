@@ -14,6 +14,13 @@
  *= require_self
  */
 
+#localvideo-container {
+  position: absolute;
+  width: 25%;
+  top: 1em;
+  left: 1em;
+  z-index: 99;
+}
 #localvideo {
   width: 100%;
 }
@@ -22,4 +29,9 @@
   float: left;
   padding: 1em;
 }
+
+#video-preview p {
+  font-size: 1.4em;
+  line-height: 1.3em;
+  padding: 1em 0;
 }

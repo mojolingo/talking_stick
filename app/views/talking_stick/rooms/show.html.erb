@@ -1,6 +1,7 @@
 <% content_for(:title) { "#{@room.name} Group Conversation" } %>
+<div id="localvideo-container"></div>
 <div class="container-fluid" role="main">
-  <div class="row">
+  <div class="row" role="controls">
     <p id="notice"><%= notice %></p>
 
     <p>
@@ -9,18 +10,34 @@
     </p>
 
     <p>
-      <button id="connect"><%= t(:join) %></button>
       <button id="sim"><%= t(:sim) %></button>
     </p>
   </div>
 
   <div class="row">
-    <div id="partnervideos" class="col-xs-7 col-md-8 col-lg-9">
-    </div>
-    </div>
+    <div id="partnervideos" class="col-xs-12">
     </div>
   </div>
 </div>
+
+<div class="modal fade" role="dialog" id="video-preview">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title"><%= t(:joining_room) %> "<%= @room.name %>"</h3>
+      </div>
+      <div class="modal-body">
+        <video id="localvideo" poster="<%= image_path 'video.png' %>"></video>
+        <p><%= t(:video_intro) %></p>
+      </div>
+      <div class="modal-footer">
+        <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Join</button>
+        <button href="javascript:history(-1);" type="button" class="btn">Exit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
@@ -28,6 +45,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  $('#video-preview').modal('show');
   var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
   var options = {
@@ -45,8 +63,7 @@ $(document).ready(function() {
   };
   TalkingStick.init(options);
 
-  $('#connect').click(TalkingStick.connect);
-  
+  $('#connect').click(startSession);
 });
 
 $(window).on('talking_stick.partner.media', function() {
@@ -59,6 +76,10 @@ $(window).on('talking_stick.partner.media', function() {
     videoCollection.css('max-width', '50%');
     tiling = 2;
   }
+function startSession() {
+  $('#localvideo').detach().appendTo('#localvideo-container');
+  TalkingStick.connect();
+};
 
   if ($(window).height() < $('#partnervideos').height()) {
     videoCollection.css('max-height', $(window).height() / (numVideos/tiling));
