@@ -11,7 +11,7 @@ TalkingStick.Partner = function(participant, options) {
   this.videoElement    = this._options.videoElement;
   this.videoStream     = undefined;
   this.connected       = false;
-  TalkingStick.trigger('partner.created', this);
+  this.trigger('created');
 }
 
 TalkingStick.Partner.prototype.log = function() {
@@ -22,10 +22,22 @@ TalkingStick.Partner.prototype.log = function() {
   TalkingStick.log.apply(this, args);
 }
 
+TalkingStick.Partner.prototype.trigger = function(name) {
+  name = 'talking_stick.partner.' + name;
+  args = Array.prototype.slice.call(arguments, 1);
+  // Syntactic sugar: make it easy to pass a list of args as the only argument
+  // This is the "right way" per
+  // http://stackoverflow.com/questions/4775722/check-if-object-is-array
+  if (args.length == 1 && Object.prototype.toString.call(args[0]) === '[object Array]') {
+    args = args[0];
+  }
+  this.videoElement.trigger(name, this, args);
+};
+
 TalkingStick.Partner.prototype.errorCallback = function() {
   // Convert arguments to a real array
   var args = Array.prototype.slice.call(arguments);
-  TalkingStick.trigger('partner.error', self, args);
+  this.trigger('error', args);
   args.unshift('error');
   this.log(args);
 }
@@ -111,8 +123,8 @@ TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
 TalkingStick.Partner.prototype.cleanup = function() {
   this.log('debug', 'Cleanup requested, shutting down.');
   this.disconnect();
-  TalkingStick.trigger('partner.cleanup', self);
   this.videoElement.remove();
+  this.trigger('cleanup');
 }
 
 TalkingStick.Partner.prototype.disconnect = function() {
@@ -126,15 +138,15 @@ TalkingStick.Partner.prototype.disconnect = function() {
 TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
   attachMediaStream($(this.videoElement)[0], stream);
   partner.videoStream = stream;
-  TalkingStick.trigger('partner.media', this);
+  this.trigger('media');
 };
 
 TalkingStick.Partner._checkForConnection = function() {
   this.log('trace', 'Checking for connection');
   if (!this.connected) {
     this.log('notice', 'Connection to partner timed out.');
-    this.disconnect();
-    TalkingStick.trigger('partner.connection_timeout', this);
+    this.trigger('connection_timeout');
+    this.cleanup();
   }
 };
 
