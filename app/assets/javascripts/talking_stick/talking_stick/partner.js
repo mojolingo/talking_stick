@@ -112,6 +112,7 @@ TalkingStick.Partner.prototype.cleanup = function() {
   this.log('debug', 'Cleanup requested, shutting down.');
   this.disconnect();
   TalkingStick.trigger('partner.cleanup', self);
+  this.videoElement.remove();
 }
 
 TalkingStick.Partner.prototype.disconnect = function() {

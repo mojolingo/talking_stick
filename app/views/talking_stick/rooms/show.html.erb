@@ -82,9 +82,7 @@ function resizeVideos() {
   videoCollection.css('width', (100/numVideos) + "%");
 };
 
-function cleanupPartner(partner) {
-  console.log('Cleaning up partner', partner);
-  $('#partnervideos [data-partner-guid=' + partner.guid + ']').remove();
+function cleanupPartner() {
   resizeVideos();
 }
 
