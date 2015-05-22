@@ -8,7 +8,7 @@ TalkingStick.Partner = function(participant, options) {
   };
   $.extend(this._options, options);
   this.signalingEngine = this._options.signalingEngine;
-  this.videoElement    = this._options.videoElement;
+  this.videoElement    = $(this._options.videoElement);
   this.videoStream     = undefined;
   this.connected       = false;
   this.trigger('created');
@@ -136,7 +136,7 @@ TalkingStick.Partner.prototype.disconnect = function() {
 };
 
 TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
-  attachMediaStream($(this.videoElement)[0], stream);
+  attachMediaStream(this.videoElement[0], stream);
   partner.videoStream = stream;
   this.trigger('media');
 };
