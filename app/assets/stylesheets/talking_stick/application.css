@@ -13,22 +13,43 @@
  *= require_tree .
  *= require_self
  */
+html,
+body,
+body > .container-fluid,
+body > .container-fluid > .row,
+body > .container-fluid > .row > [class^="col-xs-"]  {
+  height: 100%;
+}
+
+.container-fluid: {
+  height: 100%;
+}
 
 #localvideo-container {
-  position: absolute;
-  width: 25%;
-  top: 1em;
+  width: 100%;
   left: 1em;
   z-index: 99;
 }
+
 #localvideo {
   width: 100%;
+  padding: 1em;
+}
+
+.modal #localvideo {
   max-height: 320px;
 }
 
+#partnervideos {
+  width: 100%;
+  height: 100%;
+}
+
 #partnervideos video {
-  float: left;
+  float: right;
   padding: 1em;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 #video-preview p {
