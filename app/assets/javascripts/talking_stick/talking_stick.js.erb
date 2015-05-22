@@ -68,15 +68,27 @@ var TalkingStick = (function(self) {
     self.prepareVideoElement(self.localVideo);
 
     self.log('debug', 'Requesting user consent to access to input devices');
-    navigator.getUserMedia(self._options.media, function(stream) {
-      self.log('debug', 'User has granted access to input devices');
-      self.myStream = stream;
+    getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
+  };
 
-      // The JS API requires the raw DOM element, not a jQuery wrapper
-      attachMediaStream(self.localVideo[0], stream);
+  self._handleUserMedia = function(stream) {
+    self.log('debug', 'User has granted access to input devices');
+    self.myStream = stream;
 
-      self.trigger('local_media_setup');
-    }, self.errorCallback);
+    // The JS API requires the raw DOM element, not a jQuery wrapper
+    attachMediaStream(self.localVideo[0], stream);
+
+    self.trigger('local_media_setup');
+  };
+
+  self._handleUserMediaFailure = function(error) {
+    switch(error.name) {
+    case 'PermissionDeniedError':
+      self.log('error', 'User declined access to camera & microphone');
+      break;
+    default:
+      self.log('error', error);
+    }
   };
 
   self.connect = function() {
