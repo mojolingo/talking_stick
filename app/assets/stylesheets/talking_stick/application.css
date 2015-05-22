@@ -33,7 +33,7 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
 
 #localvideo {
   width: 100%;
-  padding: 1em;
+  padding-top: 1em;
 }
 
 .modal #localvideo {

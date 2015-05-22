@@ -39,6 +39,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
   $('#sim').click(sim);
+  // Attempt to keep the modal from scrolling vertically
+  // 300px is the approximate height of the modal, minus the video
+  $('#video-preview').find('video').height($(window).height() - 300);
   $('#video-preview').modal({backdrop: 'static', keyboard: false, show: true});
   var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
@@ -64,6 +67,7 @@ $(document).ready(function() {
 
 function startSession() {
   $('#localvideo').detach().appendTo('#localvideo-container');
+  $('#localvideo').height('auto');
   // Gotta restart and re-mute the video after moving it
   $('#localvideo')[0].play();
   TalkingStick.connect();
