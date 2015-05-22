@@ -28,8 +28,8 @@
         <h3 class="modal-title"><%= t(:joining_room) %> "<%= @room.name %>"</h3>
       </div>
       <div class="modal-body">
-        <video id="localvideo" poster="<%= image_path 'video.png' %>"></video>
-        <p><%= t(:video_intro) %></p>
+        <video id="localvideo" poster="<%= image_path 'talking_stick/flikr2005.gif' %>" autoplay=true></video>
+        <p id="preview_instructions"><%= t(:video_grant_access) %></p>
       </div>
       <div class="modal-footer">
         <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Join</button>
@@ -45,7 +45,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#video-preview').modal('show');
+  $('#sim').click(sim);
+  $('#video-preview').modal({backdrop: 'static', keyboad: false, show: true});
   var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
   var options = {
@@ -56,18 +57,22 @@ $(document).ready(function() {
 
   var options = {
     guid: myGuid,
-    localVideo: $('#localvideo'),
     roomUrl: '<%= room_path %>',
     signalingEngine: signalingEngine,
-    logLevel: 'debug',
+    logLevel: 'trace',
   };
   TalkingStick.init(options);
 
   $('#connect').click(startSession);
+  $(window).on('talking_stick.local_media_setup', function() {
+    $('#preview_instructions').html('<%= t(:video_intro) %>');
+  });
 });
 
 function startSession() {
   $('#localvideo').detach().appendTo('#localvideo-container');
+  // Gotta restart and re-mute the video after moving it
+  $('#localvideo')[0].play();
   TalkingStick.connect();
 };
 
@@ -77,7 +82,22 @@ function resizeVideos() {
   videoCollection.css('width', (100/numVideos) + "%");
 };
 
+function cleanupPartner(partner) {
+  console.log('Cleaning up partner', partner);
+  $('#partnervideos [data-partner-guid=' + partner.guid + ']').remove();
+  resizeVideos();
+}
+
+function sim() {
+  var el = $(document.createElement('video'));
+  el.attr('poster', "<%= image_path 'talking_stick/flikr2005.gif' %>");
+  $('#partnervideos').append(el);
+  TalkingStick.localVideo = $('#localvideo');
+  TalkingStick.trigger('partner.media', el);
+}
 
 $(window).on('talking_stick.partner.media', resizeVideos);
+$(window).on('talking_stick.partner.cleanup', cleanupPartner);
 $(window).resize(resizeVideos);
+
 </script>

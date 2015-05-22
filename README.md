@@ -123,3 +123,5 @@ This project is licensed under the MIT License. This project incorporates [Adapt
 Copyright 2015 Mojo Lingo LLC
 
 Portions copyright 2014 The WebRTC project authors
+
+[Flikr2005](https://www.flickr.com/photos/flikr/371850310/) loading image courtesy Flickr user [Flikr](https://www.flickr.com/photos/flikr/)

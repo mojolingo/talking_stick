@@ -4,7 +4,9 @@ var TalkingStick = (function(self) {
   self.joinedAt     = undefined;
   self._options = {
     media: { audio: true, video: true },
-    localVideo: undefined, // Set this to the DOM element where video should be rendered
+    localVideo: '#localvideo',
+    partnerVideos: '#partnervideos',
+    connectionTimeout: 60000,
     logLevel: 'error',
     iceServers: [],
   };
@@ -24,6 +26,7 @@ var TalkingStick = (function(self) {
     self.partners = {};
     self.guid = self._options.guid || self.generateGUID();
     self.localVideo = $(self._options.localVideo);
+    self.partnerVideos = $(self._options.partnerVideos);
     self.signalingEngine = self._options.signalingEngine;
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
@@ -103,9 +106,11 @@ var TalkingStick = (function(self) {
    */
   self.addPartner = function(participant) {
     self.log('debug', 'Adding new partner to this conversation', participant);
-    var partnerVideo = document.createElement('video');
+    var partnerVideo = $(document.createElement('video'));
+    console.log(partnerVideo);
+    partnerVideo.data('partner-guid', participant.guid);
     self.prepareVideoElement(partnerVideo);
-    $('#partnerVideos').append(partnerVideo);
+    self.partnerVideos.append(partnerVideo);
     var options = {
       videoElement: partnerVideo,
       signalingEngine: self.signalingEngine,
@@ -121,7 +126,7 @@ var TalkingStick = (function(self) {
       self.log('trace', 'Sending Offer to', partner.guid);
       // Send Offers to partners who joined before us.
       // Expect partners who join after us to send us Offers.
-      partner.sendOffer();
+      partner.sendOffer({connectionTimeout: self.connectionTimeout});
     }
 
     return partner;

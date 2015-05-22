@@ -64,21 +64,35 @@ TalkingStick.RailsSignaling.prototype._updateRoom = function() {
 };
 
 TalkingStick.RailsSignaling.prototype._updateParticipants = function(participants) {
+  $.each(TalkingStick.partners, function(i, partner) {
+    // Mark each partner for cleanup
+    partner.fresh = false;
+  });
+
   $.each(participants, function(i, participant) {
     if (participant.guid === TalkingStick.guid) {
       // Don't try to set up a connection to ourself
-      //TalkingStick.log('trace', 'Skipping own GUID', participant.guid);
       return;
     }
 
-    if (TalkingStick.partners[participant.guid]) {
+    var partner;
+    if (partner = TalkingStick.partners[participant.guid]) {
       // We already have a connection to this participant
-      //TalkingStick.log('trace', 'Skipping participant since we already have a connection', participant.guid);
+      // Mark it active so it doesn't get removed
+      partner.fresh = true;
       return;
     }
-    TalkingStick.log('trace', 'Handling new partner', participant.guid);
 
-    TalkingStick.addPartner(participant);
+    TalkingStick.log('trace', 'Handling new partner', participant.guid);
+    partner = TalkingStick.addPartner(participant);
+    partner.fresh = true;
+  });
+
+  $.each(TalkingStick.partners, function(i, partner) {
+    if (partner.fresh) { return; }
+    this.log('debug', 'Cleaning up partner', partner);
+    partner.cleanup();
+    delete TalkingStick.partners[i];
   });
 };
 
