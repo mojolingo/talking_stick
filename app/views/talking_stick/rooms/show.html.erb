@@ -28,7 +28,7 @@
         <h3 class="modal-title"><%= t(:joining_room) %> "<%= @room.name %>"</h3>
       </div>
       <div class="modal-body">
-        <video id="localvideo" poster="<%= image_path 'talking_stick/flikr2005.gif' %>" autoplay=true></video>
+        <video id="localvideo" poster="<%= image_path 'talking_stick/loading.gif' %>" autoplay=true></video>
         <p id="preview_instructions"><%= t(:video_grant_access) %></p>
       </div>
       <div class="modal-footer">
@@ -90,7 +90,7 @@ function cleanupPartner(partner) {
 
 function sim() {
   var el = $(document.createElement('video'));
-  el.attr('poster', "<%= image_path 'talking_stick/flikr2005.gif' %>");
+  el.attr('poster', "<%= image_path 'talking_stick/loading.gif' %>");
   $('#partnervideos').append(el);
   TalkingStick.localVideo = $('#localvideo');
   TalkingStick.trigger('partner.media', el);
