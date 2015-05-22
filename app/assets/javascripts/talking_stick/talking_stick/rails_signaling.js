@@ -90,7 +90,6 @@ TalkingStick.RailsSignaling.prototype._updateParticipants = function(participant
 
   $.each(TalkingStick.partners, function(i, partner) {
     if (partner.fresh) { return; }
-    this.log('debug', 'Cleaning up partner', partner);
     partner.cleanup();
     delete TalkingStick.partners[i];
   });
