@@ -124,7 +124,8 @@ TalkingStick.Partner.prototype.cleanup = function() {
   this.log('debug', 'Cleanup requested, shutting down.');
   this.disconnect();
   this.videoElement.remove();
-  this.trigger('cleanup');
+  // FIXME Trigger this event on the localVideo object since our own object has just been removed
+  TalkingStick.trigger('partner.cleanup', this);
 }
 
 TalkingStick.Partner.prototype.disconnect = function() {
