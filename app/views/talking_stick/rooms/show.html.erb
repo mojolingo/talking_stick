@@ -76,7 +76,13 @@ function startSession() {
 function resizeVideos() {
   var videoCollection = $('#partnervideos video');
   var numVideos = videoCollection.length;
-  videoCollection.css('width', (100/numVideos) + "%");
+  var square = Math.sqrt(numVideos);
+  if (!isInt(square)) {
+    // Round up to the next square
+    square = parseInt(square) + 1;
+  }
+  console.log(square);
+  videoCollection.css('width', (100/square) + "%");
 };
 
 function cleanupPartner() {
@@ -89,6 +95,14 @@ function sim() {
   $('#partnervideos').append(el);
   TalkingStick.localVideo = $('#localvideo');
   TalkingStick.trigger('partner.media', el);
+}
+
+function isInt(value){
+  if((parseFloat(value) == parseInt(value)) && !isNaN(value)){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 $(window).on('talking_stick.partner.media', resizeVideos);
