@@ -70,7 +70,7 @@ TalkingStick.Partner.prototype.sendOffer = function(options) {
     self.gatheringCandidates = true;
     self.peerConnection.setLocalDescription(offer);
     self.signalingEngine.sendOffer(self.guid, offer);
-    setTimeout(self._checkForConnection, options.connectionTimeout);
+    setTimeout(self._checkForConnection, self._options.connectionTimeout);
   }, this.errorCallback);
 };
 
