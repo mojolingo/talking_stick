@@ -21,7 +21,7 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
   height: 100%;
 }
 
-.container-fluid: {
+.container-fluid {
   height: 100%;
 }
 
