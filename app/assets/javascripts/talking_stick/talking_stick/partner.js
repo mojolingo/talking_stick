@@ -51,6 +51,10 @@ TalkingStick.Partner.prototype.connect = function(stream) {
   this.peerConnection = new RTCPeerConnection(configuration);
 
   var self = this;
+  this.peerConnection.oniceconnectionstatechange = function(ev) {
+    self.trigger('ice_connection_state_change', ev);
+  };
+
   this.peerConnection.onicecandidate = function() {
     self.handleLocalICECandidate.apply(self, arguments);
   }
@@ -71,8 +75,9 @@ TalkingStick.Partner.prototype.sendOffer = function(options) {
 };
 
 TalkingStick.Partner.prototype.handleOffer = function(offer) {
-  this.log('debug', 'Processing Offer received from', this.guid);
-  this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+  var offer = new RTCSessionDescription(offer);
+  this.log('debug', 'Processing Offer received from', this.guid, offer);
+  this.peerConnection.setRemoteDescription(offer);
   var self = this;
 
   this.peerConnection.onaddstream = function(event) {
@@ -132,6 +137,7 @@ TalkingStick.Partner.prototype.disconnect = function() {
 };
 
 TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
+  this.log('trace', 'Attaching media stream');
   attachMediaStream(this.videoElement[0], stream);
   partner.videoStream = stream;
   this.trigger('media');
