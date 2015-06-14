@@ -31,7 +31,8 @@ TalkingStick.Partner.prototype.trigger = function(name) {
   if (args.length == 1 && Object.prototype.toString.call(args[0]) === '[object Array]') {
     args = args[0];
   }
-  this.videoElement.trigger(name, this, args);
+  args.unshift(this);
+  this.videoElement.trigger(name, args);
 };
 
 TalkingStick.Partner.prototype.errorCallback = function() {
