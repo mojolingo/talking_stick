@@ -120,9 +120,7 @@ TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
 TalkingStick.Partner.prototype.cleanup = function() {
   this.log('debug', 'Cleanup requested, shutting down.');
   this.disconnect();
-  this.videoElement.remove();
-  // FIXME Trigger this event on the localVideo object since our own object has just been removed
-  TalkingStick.trigger('partner.cleanup', this);
+  this.trigger('cleanup');
 }
 
 TalkingStick.Partner.prototype.disconnect = function() {
@@ -144,7 +142,6 @@ TalkingStick.Partner._checkForConnection = function() {
   if (!this.connected) {
     this.log('notice', 'Connection to partner timed out.');
     this.trigger('connection_timeout');
-    this.cleanup();
   }
 };
 
