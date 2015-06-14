@@ -96,8 +96,9 @@ TalkingStick.Partner.prototype.handleAnswer = function(answer) {
 };
 
 TalkingStick.Partner.prototype.handleRemoteICECandidate = function(candidate) {
+  candidate = new RTCIceCandidate(candidate);
   this.log('trace', 'Adding remote ICE candidate', candidate);
-  this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+  this.peerConnection.addIceCandidate(candidate);
 };
 
 TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
