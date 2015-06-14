@@ -141,6 +141,7 @@ var TalkingStick = (function(self) {
       partner.sendOffer({connectionTimeout: self.connectionTimeout});
     }
 
+    self.trigger('new_partner', partner);
     return partner;
   };
 
