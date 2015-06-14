@@ -45,11 +45,15 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
   height: 100%;
 }
 
-#partnervideos video {
+#partnervideos .video {
   float: right;
   padding: 1em;
   max-height: 100%;
   max-width: 100%;
+}
+
+#partnervideos .video video {
+  width: 100%;
 }
 
 #video-preview p {
