@@ -71,7 +71,7 @@ TalkingStick.Partner.prototype.sendOffer = function(options) {
     self.peerConnection.setLocalDescription(offer);
     self.signalingEngine.sendOffer(self.guid, offer);
     setTimeout(self._checkForConnection, self._options.connectionTimeout);
-  }, this.errorCallback);
+  }, function() { self.errorCallback.apply(self, arguments) } );
 };
 
 TalkingStick.Partner.prototype.handleOffer = function(offer) {
@@ -90,7 +90,7 @@ TalkingStick.Partner.prototype.handleOffer = function(offer) {
     self.peerConnection.setLocalDescription(new RTCSessionDescription(answer));
     self.log('debug', 'Sending Answer to', self.guid);
     self.signalingEngine.sendAnswer(self.guid, answer);
-  }, this.errorCallback);
+  }, function() { self.errorCallback.apply(self, arguments) } );
 };
 
 TalkingStick.Partner.prototype.handleAnswer = function(answer) {
