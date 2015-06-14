@@ -4,8 +4,11 @@ var TalkingStick = (function(self) {
   self.joinedAt     = undefined;
   self._options = {
     media: { audio: true, video: true },
-    localVideo: undefined, // Set this to the DOM element where video should be rendered
+    localVideo: '#localvideo',
+    partnerVideos: '#partnervideos',
+    connectionTimeout: 60000,
     logLevel: 'error',
+    iceServers: [],
   };
 
   self.logLevels = [
@@ -22,6 +25,8 @@ var TalkingStick = (function(self) {
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
     self.partners = {};
     self.guid = self._options.guid || self.generateGUID();
+    self.localVideo = $(self._options.localVideo);
+    self.partnerVideos = $(self._options.partnerVideos);
     self.signalingEngine = self._options.signalingEngine;
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
@@ -47,19 +52,43 @@ var TalkingStick = (function(self) {
     }
   }
 
-  self.setupLocalVideo = function() {
-    var localVideo = $(self._options.localVideo);
+  self.trigger = function(name) {
+    name = 'talking_stick.' + name;
+    args = Array.prototype.slice.call(arguments, 1);
+    // Syntactic sugar: make it easy to pass a list of args as the only argument
+    // This is the "right way" per
+    // http://stackoverflow.com/questions/4775722/check-if-object-is-array
+    if (args.length == 1 && Object.prototype.toString.call(args[0]) === '[object Array]') {
+      args = args[0];
+    }
+    self.localVideo.trigger(name, args);
+  }
 
-    self.prepareVideoElement(localVideo);
+  self.setupLocalVideo = function() {
+    self.prepareVideoElement(self.localVideo);
 
     self.log('debug', 'Requesting user consent to access to input devices');
-    navigator.getUserMedia(self._options.media, function(stream) {
-      self.log('debug', 'User has granted access to input devices');
-      self.myStream = stream;
+    getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
+  };
 
-      // The JS API requires the raw DOM element, not a jQuery wrapper
-      attachMediaStream(localVideo[0], stream);
-    }, self.errorCallback);
+  self._handleUserMedia = function(stream) {
+    self.log('debug', 'User has granted access to input devices');
+    self.myStream = stream;
+
+    // The JS API requires the raw DOM element, not a jQuery wrapper
+    attachMediaStream(self.localVideo[0], stream);
+
+    self.trigger('local_media_setup');
+  };
+
+  self._handleUserMediaFailure = function(error) {
+    switch(error.name) {
+    case 'PermissionDeniedError':
+      self.log('error', 'User declined access to camera & microphone');
+      break;
+    default:
+      self.log('error', error);
+    }
   };
 
   self.connect = function() {
@@ -73,25 +102,26 @@ var TalkingStick = (function(self) {
     .success(function(data) {
       self.log('notice', 'TalkingStick connected to the room.');
       self.joinedAt = new Date(data.joined_at);
-      self.signalingEngine.connected();
+      self.trigger('connected');
     })
     .fail(function() { self.ajaxErrorLog('Error joining the room', arguments) });
   };
 
-  
+
   self.errorCallback = function(error) {
     self.log('error', error);
   };
-  
+
   /*
    * participant.guid
    * participant.joined_at
    */
   self.addPartner = function(participant) {
     self.log('debug', 'Adding new partner to this conversation', participant);
-    var partnerVideo = document.createElement('video');
+    var partnerVideo = $(document.createElement('video'));
+    partnerVideo.attr('data-partner-guid', participant.guid);
+    partnerVideo.attr('poster', "<%= image_path 'talking_stick/loading.gif' %>");
     self.prepareVideoElement(partnerVideo);
-    $('#partnerVideos').append(partnerVideo);
     var options = {
       videoElement: partnerVideo,
       signalingEngine: self.signalingEngine,
@@ -107,9 +137,10 @@ var TalkingStick = (function(self) {
       self.log('trace', 'Sending Offer to', partner.guid);
       // Send Offers to partners who joined before us.
       // Expect partners who join after us to send us Offers.
-      partner.sendOffer();
+      partner.sendOffer({connectionTimeout: self.connectionTimeout});
     }
 
+    self.trigger('new_partner', partner);
     return partner;
   };
 

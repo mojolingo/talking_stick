@@ -1,22 +1,48 @@
-<p id="notice"><%= notice %></p>
+<% content_for(:title) { "#{@room.name} Group Conversation" } %>
+<div class="container-fluid" role="main" id="room" data-room-name="<%= @room.name %>">
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="row">
+        <div class="col-xs-12">
+          <div id="localvideo-container"></div>
+        </div>
+        <div class="col-xs-12">
+          <span class="navbar-brand"><%= @room.name %></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-9">
+      <div id="partnervideos"></div>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @room.name %>
-</p>
-
-<p>
-  <button id="connect">Connect to room</button>
-</p>
-
-<video id="localvideo"></video>
-<div id="partnerVideos"></div>
-
-<%= link_to 'Edit', edit_room_path(@room) %> |
-<%= link_to 'Back', rooms_path %>
+<div class="modal fade" role="dialog" id="video-preview">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title"><%= t(:joining_room) %> "<%= @room.name %>"</h3>
+      </div>
+      <div class="modal-body">
+        <video id="localvideo" poster="<%= image_path 'talking_stick/loading.gif' %>" autoplay=true></video>
+        <p id="preview_instructions"><%= t(:video_grant_access) %></p>
+      </div>
+      <div class="modal-footer">
+        <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Join</button>
+        <button href="javascript:history(-1);" type="button" class="btn">Exit</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script type="text/javascript">
 $(document).ready(function() {
+  $('#sim').click(sim);
+  // Attempt to keep the modal from scrolling vertically
+  // 300px is the approximate height of the modal, minus the video
+  $('#video-preview').find('video').height($(window).height() - 300);
+  $('#video-preview').modal({backdrop: 'static', keyboard: false, show: true});
   var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
   var options = {
@@ -27,14 +53,60 @@ $(document).ready(function() {
 
   var options = {
     guid: myGuid,
-    localVideo: $('#localvideo'),
     roomUrl: '<%= room_path %>',
     signalingEngine: signalingEngine,
-    logLevel: 'debug',
+    logLevel: 'trace',
   };
   TalkingStick.init(options);
 
-  $('#connect').click(TalkingStick.connect);
-  
+  $('#connect').click(startSession);
+  $(window).on('talking_stick.local_media_setup', function() {
+    $('#preview_instructions').html('<%= t(:video_intro) %>');
+  });
 });
+
+function startSession() {
+  $('#localvideo').detach().appendTo('#localvideo-container');
+  $('#localvideo').height('auto');
+  // Gotta restart and re-mute the video after moving it
+  $('#localvideo')[0].play();
+  TalkingStick.connect();
+};
+
+function resizeVideos() {
+  var videoCollection = $('#partnervideos video');
+  var numVideos = videoCollection.length;
+  var square = Math.sqrt(numVideos);
+  if (!isInt(square)) {
+    // Round up to the next square
+    square = parseInt(square) + 1;
+  }
+  console.log(square);
+  videoCollection.css('width', (100/square) + "%");
+};
+
+function cleanupPartner() {
+  resizeVideos();
+}
+
+function sim() {
+  var el = $(document.createElement('video'));
+  el.attr('poster', "<%= image_path 'talking_stick/loading.gif' %>");
+  $('#partnervideos').append(el);
+  TalkingStick.localVideo = $('#localvideo');
+  TalkingStick.trigger('partner.media', el);
+}
+
+function isInt(value){
+  if((parseFloat(value) == parseInt(value)) && !isNaN(value)){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+$(window).on('talking_stick.partner.media', resizeVideos);
+$(window).on('talking_stick.partner.cleanup', cleanupPartner);
+$(window).resize(resizeVideos);
+
 </script>

@@ -1,6 +1,8 @@
 TalkingStick.RailsSignaling = function(options) {
   this.options = options;
   this.roomUrl = options.url;
+  var self = this;
+  $('#localvideo').on('talking_stick.connected', function() { self.connected.apply(self)} );
 }
 
 TalkingStick.RailsSignaling.prototype.connected = function() {
@@ -20,7 +22,9 @@ TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate)
 TalkingStick.RailsSignaling.prototype.iceCandidateGatheringComplete = function(to, candidates) {
   var data = {
     signal_type: 'candidates',
-    data: JSON.stringify(candidates),
+    // IE doesn't like big objects, so filter down and
+    // only keep the actual candidate information
+    data: JSON.stringify(candidates, ['candidate', 'sdpMLineIndex', 'sdpMid']),
   }
   this._sendData('ICE Candidates', to, data);
 }
@@ -62,21 +66,34 @@ TalkingStick.RailsSignaling.prototype._updateRoom = function() {
 };
 
 TalkingStick.RailsSignaling.prototype._updateParticipants = function(participants) {
+  $.each(TalkingStick.partners, function(i, partner) {
+    // Mark each partner for cleanup
+    partner.fresh = false;
+  });
+
   $.each(participants, function(i, participant) {
     if (participant.guid === TalkingStick.guid) {
       // Don't try to set up a connection to ourself
-      //TalkingStick.log('trace', 'Skipping own GUID', participant.guid);
       return;
     }
 
-    if (TalkingStick.partners[participant.guid]) {
+    var partner;
+    if (partner = TalkingStick.partners[participant.guid]) {
       // We already have a connection to this participant
-      //TalkingStick.log('trace', 'Skipping participant since we already have a connection', participant.guid);
+      // Mark it active so it doesn't get removed
+      partner.fresh = true;
       return;
     }
-    TalkingStick.log('trace', 'Handling new partner', participant.guid);
 
-    TalkingStick.addPartner(participant);
+    TalkingStick.log('trace', 'Handling new partner', participant.guid);
+    partner = TalkingStick.addPartner(participant);
+    partner.fresh = true;
+  });
+
+  $.each(TalkingStick.partners, function(i, partner) {
+    if (partner.fresh) { return; }
+    partner.cleanup();
+    delete TalkingStick.partners[i];
   });
 };
 

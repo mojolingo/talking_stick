@@ -11,3 +11,4 @@
 // about supported directives.
 //
 //= require_tree .
+//= require talking_stick/application.js

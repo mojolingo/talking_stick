@@ -35,8 +35,11 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
     ```
     $ rake railties:install:migrations db:migrate
     ```
+    
 4. Videconference!
     After booting Rails, point your browser to something like [http://localhost:3000/talking_stick/rooms](http://localhost:3000/talking_stick/rooms). From there you will be able to create and join rooms.
+
+For a better experience, we recommend also using [Bootstrap](http://getbootstrap.com). Easy installation of Bootstrap into Rails is available via [twitter-bootstrap-rails](https://github.com/seyhunak/twitter-bootstrap-rails).
 
 ## How it works
 
@@ -45,7 +48,9 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
 * Rails app notifies all room participants when one joins or leaves
 * Rails app proxies call setup between participants in each room
 
-## Providing your own signaling mechanism
+## Extending TalkingStick
+
+### Providing your own signaling mechanism
 
 One of the critical decisions made by the standards bodies behind WebRTC was a decision to leave the signaling of WebRTC up to the application. This means that an application may use any means it desires to give the endpoints the data necessary to communicate directly.
 
@@ -96,6 +101,11 @@ This function returns an instance of `TalkingStick.Partner`.
 * `TalkingStick.parters` The collection of `TalkingStick.Partners` to whom the local session is currently connected. Treat it as read-only.
 * `TalkingStick.log(level, obj[, obj ...])` Allows messages to be conditionally logged to the console. Valid levels are strings, and may be one of `trace`, `debug`, `notice`, `warning`, or `error`.
 
+### Events
+
+* `talking_stick.local_media_setup`: (no arguments) Triggered after local media has been initialized and drawn to the configured element
+* TODO: Document the rest of the events
+
 ## TODO
 
 See the [Pivotal Tracker story board](https://www.pivotaltracker.com/n/projects/1343190).  Contributions welcome!
@@ -113,3 +123,5 @@ This project is licensed under the MIT License. This project incorporates [Adapt
 Copyright 2015 Mojo Lingo LLC
 
 Portions copyright 2014 The WebRTC project authors
+
+[Flikr2005](https://www.flickr.com/photos/flikr/371850310/) loading image courtesy Flickr user [Flikr](https://www.flickr.com/photos/flikr/)
