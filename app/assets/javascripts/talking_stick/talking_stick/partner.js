@@ -140,7 +140,12 @@ TalkingStick.Partner.prototype.disconnect = function() {
 
 TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
   this.log('trace', 'Attaching media stream');
-  attachMediaStream(this.videoElement[0], stream);
+  var el = attachMediaStream(this.videoElement[0], stream);
+  if (el) {
+    // Compatibility with Temasys plugin
+    // See https://temasys.atlassian.net/wiki/display/TWPP/How+to+integrate+the+Temasys+WebRTC+Plugin+into+your+website - "Attach streams"
+    this.videoElement = $(el);
+  }
   partner.videoStream = stream;
   this.trigger('media');
 };
