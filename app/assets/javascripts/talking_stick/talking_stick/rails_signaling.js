@@ -2,7 +2,7 @@ TalkingStick.RailsSignaling = function(options) {
   this.options = options;
   this.roomUrl = options.url;
   var self = this;
-  $(document).on('talking_stick.connected', function() { self.connected.apply(self)} );
+  $('#localvideo').on('talking_stick.connected', function() { self.connected.apply(self)} );
 }
 
 TalkingStick.RailsSignaling.prototype.connected = function() {
@@ -22,7 +22,9 @@ TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate)
 TalkingStick.RailsSignaling.prototype.iceCandidateGatheringComplete = function(to, candidates) {
   var data = {
     signal_type: 'candidates',
-    data: JSON.stringify(candidates),
+    // IE doesn't like big objects, so filter down and
+    // only keep the actual candidate information
+    data: JSON.stringify(candidates, ['candidate', 'sdpMLineIndex', 'sdpMid']),
   }
   this._sendData('ICE Candidates', to, data);
 }
