@@ -42,11 +42,6 @@ TalkingStick.Partner.prototype.errorCallback = function() {
   this.log(args);
 }
 
-TalkingStick.Partner.prototype.setDescription = function(answer) {
-  this.log('trace', 'Setting remote description to', answer);
-  this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-};
-
 TalkingStick.Partner.prototype.connect = function(stream) {
   var configuration = {
     iceServers: this._options.iceServers,
