@@ -77,13 +77,15 @@ TalkingStick.Partner.prototype.sendOffer = function(options) {
 TalkingStick.Partner.prototype.handleOffer = function(offer) {
   var offer = new RTCSessionDescription(offer);
   this.log('debug', 'Processing Offer received from', this.guid, offer);
-  this.peerConnection.setRemoteDescription(offer);
   var self = this;
 
   this.peerConnection.onaddstream = function(event) {
     self._attachMediaStream(event.stream);
     self.connected = true;
   };
+
+  this.peerConnection.setRemoteDescription(offer);
+
   this.peerConnection.createAnswer(function(answer) {
     self.peerConnection.setLocalDescription(new RTCSessionDescription(answer));
     self.log('debug', 'Sending Answer to', self.guid);
