@@ -67,6 +67,9 @@ var TalkingStick = (function(self) {
   self.setupLocalVideo = function() {
     self.prepareVideoElement(self.localVideo);
 
+    // Prevent local audio feedback
+    self.localVideo.attr('muted', true);
+
     self.log('debug', 'Requesting user consent to access to input devices');
     getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
   };
@@ -149,9 +152,6 @@ var TalkingStick = (function(self) {
 
     // Ensure video streams play as soon as they are attached
     el.attr('autoplay', true);
-
-    // Prevent local audio feedback
-    el.attr('muted', true);
   };
 
   self.generateGUID = function () {
