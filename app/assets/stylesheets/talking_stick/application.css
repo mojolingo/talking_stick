@@ -62,3 +62,7 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
   line-height: 1.3em;
   padding: 1em 0;
 }
+
+#form-submit-buttons {
+  padding-top: 20px;
+}

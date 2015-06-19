@@ -11,15 +11,24 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+  <div class="form-group">
+    <div class="field">
+      <p><%= f.label :name %></p>
+      <p><%= f.text_field :name, class: 'form-control' %></p>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :last_used %><br>
-    <%= f.datetime_select :last_used %>
+  <div class="form-group">
+    <div class="field">
+      <p><%= f.label :last_used %></p>
+      <p><%= f.datetime_select :last_used, class: 'form-control' %></p>
+    </div>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-group">
+    <div id="form-submit-buttons" class="actions">
+      <p><%= f.submit "Create", class: 'btn btn-success' %>
+        <span><%= link_to 'Back', rooms_path, class: 'btn btn-default pull-right' %></span>
+      </p>
+    </div>
+    
   </div>
 <% end %>
