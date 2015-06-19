@@ -1,29 +1,32 @@
-<p id="notice"><%= notice %></p>
+<div class="container"> 
+  <p id="notice"><%= notice %></p>
 
-<h1><%= t(:listing_rooms) %></h1>
+  <h1><%= t(:listing_rooms) %></h1>
 
-<table>
-  <thead>
-    <tr>
-      <th><%= t(:name) %></th>
-      <th><%= t(:last_used) %></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @rooms.each do |room| %>
+  <table>
+    <thead>
       <tr>
-        <td><%= room.name %></td>
-        <td><%= room.last_used %></td>
-        <td><%= link_to t(:show), room %></td>
-        <td><%= link_to t(:edit), edit_room_path(room) %></td>
-        <td><%= link_to t(:destroy), room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th><%= t(:name) %></th>
+        <th><%= t(:last_used) %></th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @rooms.each do |room| %>
+        <tr>
+          <td><%= room.name %></td>
+          <td><%= room.last_used %></td>
+          <td><%= link_to t(:show), room %></td>
+          <td><%= link_to t(:edit), edit_room_path(room) %></td>
+          <td><%= link_to t(:destroy), room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to t(:new_room), new_room_path %>
+  <br>
+
+  <%= link_to t(:new_room), new_room_path %>
+
+</div>

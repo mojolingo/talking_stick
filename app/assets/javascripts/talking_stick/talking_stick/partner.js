@@ -1,5 +1,6 @@
 TalkingStick.Partner = function(participant, options) {
   this.gatheringCandidates = false;
+  this.name          = participant.name;
   this.guid          = participant.guid;
   this.joinedAt      = new Date(participant.joined_at);
   this.localICECandidates = [];

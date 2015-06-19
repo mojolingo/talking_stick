@@ -118,9 +118,9 @@ var TalkingStick = (function(self) {
    */
   self.addPartner = function(participant) {
     self.log('debug', 'Adding new partner to this conversation', participant);
-    var partnerVideo = $(document.createElement('video'));
-    partnerVideo.attr('data-partner-guid', participant.guid);
-    partnerVideo.attr('poster', "<%= image_path 'talking_stick/loading.gif' %>");
+    var partnerVideo = $(document.createElement('video')); // <video>
+    partnerVideo.attr('data-partner-guid', participant.guid); // <video data-partner-guid="abcd1234">
+    partnerVideo.attr('poster', "<%= image_path 'talking_stick/loading.gif' %>"); // <video poster="talking_stick/loading.gif"
     self.prepareVideoElement(partnerVideo);
     var options = {
       videoElement: partnerVideo,

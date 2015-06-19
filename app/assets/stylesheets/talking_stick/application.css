@@ -16,7 +16,7 @@
 html,
 body,
 body > .container-fluid,
-body > .container-fluid > .row,
+body > .container-fluid > .row
 body > .container-fluid > .row > [class^="col-xs-"]  {
   height: 100%;
 }
@@ -34,6 +34,7 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
 #localvideo {
   width: 100%;
   padding-top: 1em;
+  max-width: 200px;
 }
 
 .modal #localvideo {
