@@ -2,6 +2,8 @@ var TalkingStick = (function(self) {
   self.guid         = undefined;
   self.myStream     = undefined;
   self.joinedAt     = undefined;
+  self.audioMuted   = false;
+  self.videoMuted   = false;
   self._options = {
     media: { audio: true, video: true },
     localVideo: '#localvideo',
@@ -73,6 +75,34 @@ var TalkingStick = (function(self) {
     self.log('debug', 'Requesting user consent to access to input devices');
     getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
   };
+
+  self.muteAudio = function() {
+    self.log('debug', 'User has requested audio be muted');
+    self.myStream.getAudioTracks()[0].enabled = false;
+  }
+
+  self.muteVideo = function() {
+    self.log('debug', 'User has requested video be muted');
+    self.myStream.getVideoTracks()[0].enabled = false;
+  }
+
+  self.unmuteAudio = function() {
+    self.log('debug', 'User has requested audio be unmuted');
+    self.myStream.getAudioTracks()[0].enabled = true;
+  }
+
+  self.unmuteVideo = function() {
+    self.log('debug', 'User has requested video be unmuted');
+    self.myStream.getVideoTracks()[0].enabled = true;
+  }
+
+  self.audioMuted = function() {
+    return !self.myStream.getAudioTracks()[0].enabled;
+  }
+
+  self.videoMuted = function() {
+    return !self.myStream.getVideoTracks()[0].enabled;
+  }
 
   self._handleUserMedia = function(stream) {
     self.log('debug', 'User has granted access to input devices');
