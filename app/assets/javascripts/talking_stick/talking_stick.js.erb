@@ -110,6 +110,12 @@ var TalkingStick = (function(self) {
     .fail(function() { self.ajaxErrorLog('Error joining the room', arguments) });
   };
 
+  self.disconnect = function() {
+    $.each(self.partners, function(i, partner) {
+      partner.cleanup();
+    });
+    self.trigger('disconnected');
+  };
 
   self.errorCallback = function(error) {
     self.log('error', error);

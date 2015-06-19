@@ -9,9 +9,10 @@ TalkingStick.RailsSignaling.prototype.connected = function() {
   // Check now, then schedule a timer to check for new participants
   this._updateRoom();
   var signaling = this;
-  setInterval(function() {
+  var pollingInterval = setInterval(function() {
     signaling._updateRoom.apply(signaling);
   }, 3000);
+  $('#localvideo').on('talking_stick.disconnected', function() { clearInterval(pollingInterval); });
 }
 
 TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate) {
