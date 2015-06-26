@@ -124,11 +124,12 @@ var TalkingStick = (function(self) {
     }
   };
 
-  self.connect = function() {
+  self.connect = function(name) {
     // Tell the server we're ready to start contacting the other participants
     var data = {
       participant: {
         guid: self.guid,
+        name: name
       }
     }
     $.post(self._options.roomUrl + '/participants.json', data)
