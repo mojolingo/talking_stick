@@ -160,7 +160,7 @@ var TalkingStick = (function(self) {
     self.log('debug', 'Adding new partner to this conversation', participant);
     var partnerVideo = $(document.createElement('video')); // <video>
     partnerVideo.attr('data-partner-guid', participant.guid); // <video data-partner-guid="abcd1234">
-    partnerVideo.attr('poster', "http://www.bogotobogo.com/svg_source/svgclock.svg"); // <video poster="talking_stick/loading.gif"
+    partnerVideo.attr('poster', "<%= image_path 'talking_stick/loading.svg' %>"); // <video poster="talking_stick/loading.gif"
     self.prepareVideoElement(partnerVideo);
     var options = {
       videoElement: partnerVideo,
