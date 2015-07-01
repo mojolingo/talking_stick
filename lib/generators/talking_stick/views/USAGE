@@ -1,0 +1,18 @@
+Description:
+  Creates default participant and room views available for customization
+
+Run:
+  rails generate talking_stick:views
+
+This will create the following default views:
+  app/views/talking_stick/participants/_form.html.erb
+  app/views/talking_stick/participants/edit.html.erb
+  app/views/talking_stick/participants/index.html.erb
+  app/views/talking_stick/participants/new.html.erb
+  app/views/talking_stick/participants/show.html.erb
+
+  app/views/talking_stick/rooms/_form.html.erb
+  app/views/talking_stick/rooms/edit.html.erb
+  app/views/talking_stick/rooms/index.html.erb
+  app/views/talking_stick/rooms/new.html.erb
+  app/views/talking_stick/rooms/show.html.erb
