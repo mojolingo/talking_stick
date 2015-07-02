@@ -21,7 +21,7 @@
       <% @rooms.each do |room| %>
         <tr>
           <td><%= room.name %></td>
-          <td><%= room.last_used %></td>
+          <td><%= room.last_used.strftime("%b %d, %l:%M %P") %></td>
           <td><%= link_to 'Enter', room %></td>
           <td><%= link_to t(:edit), edit_room_path(room) %></td>
           <td><%= link_to t(:destroy), room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
