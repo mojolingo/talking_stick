@@ -5,6 +5,8 @@ module TalkingStick
     belongs_to :recipient, class_name: "TalkingStick::Participant"
     validates :room, :sender, :recipient, presence: true
 
+    default_scope { order 'created_at ASC' }
+
     # The normal delegate method seems to not be working for an unknown reason
     def sender_guid
       self.sender.guid
