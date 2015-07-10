@@ -2,9 +2,13 @@ it:
   camera: fotocamera
   destroy: Distruggere
   edit: Modifica
+  join: Unirsi
   last_used: Ultimo Uso
   listing_rooms: Lista Camere
   microphone: microfono
   name: Nome
   new_room: Creo Camere
   show: Mostrare
+  your_name: Il tuo nome
+  video_grant_access: Per partecipare a questa conversazione è necessario concedere l'accesso alla videocamera e al microfono.
+  video_intro: Indossare pantaloni (opzionale), controlla i tuoi capelli (richiesto), e premere "Unirsi" quando si è pronti per iniziare!
