@@ -29,7 +29,7 @@
         <p id="preview_instructions"><%= t(:video_grant_access) %></p>
       </div>
       <div class="modal-footer">
-        <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Join</button>
+        <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal" disabled>Join</button>
         <button href="javascript:history(-1);" type="button" class="btn">Exit</button>
       </div>
     </div><!-- /.modal-content -->
@@ -62,6 +62,7 @@ $(document).ready(function() {
   $('#connect').click(startSession);
   $(window).on('talking_stick.local_media_setup', function() {
     $('#preview_instructions').html('<%= t(:video_intro) %>');
+    $('form#connect input[name="join"]').attr('disabled', false);
   });
 });
 
