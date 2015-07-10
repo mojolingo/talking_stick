@@ -1,9 +1,11 @@
 en:
+  camera: camera
   destroy: Destroy
   edit: Edit
   join: Join
   last_used: Last Used
   listing_things: Listing Rooms
+  microphone: microphone
   name: Name
   new_room: New Room
   show: Show

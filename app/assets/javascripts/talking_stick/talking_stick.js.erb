@@ -4,6 +4,7 @@ var TalkingStick = (function(self) {
   self.joinedAt     = undefined;
   self.audioMuted   = false;
   self.videoMuted   = false;
+  self.partners     = {};
   self._options = {
     media: { audio: true, video: true },
     localVideo: '#localvideo',
@@ -25,11 +26,11 @@ var TalkingStick = (function(self) {
     $.extend(self._options, options);
 
     self.logLevelIdx = self.logLevels.indexOf(self._options.logLevel);
-    self.partners = {};
     self.guid = self._options.guid || self.generateGUID();
     self.localVideo = $(self._options.localVideo);
     self.partnerVideos = $(self._options.partnerVideos);
     self.signalingEngine = self._options.signalingEngine;
+    self.detectDevices();
     self.setupLocalVideo();
     self.log('notice', 'TalkingStick initialized.');
   };
@@ -52,7 +53,7 @@ var TalkingStick = (function(self) {
         break;
       }
     }
-  }
+  };
 
   self.trigger = function(name) {
     name = 'talking_stick.' + name;
@@ -64,6 +65,66 @@ var TalkingStick = (function(self) {
       args = args[0];
     }
     self.localVideo.trigger(name, args);
+  };
+
+  self.detectDevices = function() {
+    if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.getSources === 'undefined') {
+      self.log('warning', 'MediaStreamTrack is not defined.  We will not be able to offer device selection.');
+    } else {
+      MediaStreamTrack.getSources(self.handleDevices);
+    }
+  };
+
+  self.handleDevices = function(devices) {
+    var microphones = 1;
+    var cameras = 1;
+    devices = devices.map(function(device) {
+      // Devices (SourceInfo) objects are read-only
+      // Make a copy of the data here so we can apply default labels
+      var tsDevice = {
+        id: "" + device.id,
+        label: "" + device.label,
+        facing: "" + device.facing,
+        kind: "" + device.kind,
+      }
+      if (tsDevice.kind === 'audio' && tsDevice.label == '') {
+        tsDevice.label = "<%= I18n.t('microphone') %> " + microphones++;
+      } else if (tsDevice.kind === 'video' && tsDevice.label == '') {
+        tsDevice.label = "<%= I18n.t('camera') %> " + cameras++;
+      }
+      return tsDevice;
+    });
+    self.log('trace', 'Device enumeration complete', devices);
+    self.devices = devices;
+    self.trigger('devices_ready', devices);
+  };
+
+  self.applyDeviceSelections = function(sourceIds) {
+    self.log('info', "Changing devices at user's request.", sourceIds)
+    if (!!self.myStream) {
+      self.localVideo.src = null;
+      self.myStream.stop();
+    }
+
+    var newConstraints = {}
+    if (sourceIds.audio) {
+      newConstraints.audio = {
+        optional: [{
+          sourceId: sourceIds.audio
+        }]
+      }
+    }
+
+    if (sourceIds.video) {
+      newConstraints.video = {
+        optional: [{
+          sourceId: sourceIds.video
+        }]
+      }
+    }
+
+    $.extend(self._options.media, newConstraints);
+    self.setupLocalVideo();
   }
 
   self.setupLocalVideo = function() {
