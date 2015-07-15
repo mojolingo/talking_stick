@@ -131,7 +131,8 @@ var TalkingStick = (function(self) {
     self.prepareVideoElement(self.localVideo);
 
     // Prevent local audio feedback
-    self.localVideo.attr('muted', true);
+    // Chrome allows setting the attribute via jQuery; Firefox does not.
+    self.localVideo[0].muted = true;
 
     self.log('debug', 'Requesting user consent to access to input devices');
     getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
