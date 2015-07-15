@@ -7,6 +7,7 @@ module TalkingStick
 
     def set_defaults
       self.joined_at ||= Time.now
+      self.last_seen ||= self.joined_at
     end
 
     class << self
