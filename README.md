@@ -36,13 +36,20 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
     $ rake railties:install:migrations db:migrate
     ```
 
-4. **[optional]** Generate the default `participant` and `room` views which are then available for customization.  From your app's root directory: 
+4. Import Assets
+    Add the following to your application's `assets/javascripts/application.js`:
+
+    ```javascript
+    //= require talking_stick/application
+    ```
+
+5. **[optional]** Generate the default `participant` and `room` views which are then available for customization.  From your app's root directory:
 
    ```
    $ rails generate talking_stick:views
    ```
-    
-5. Videconference!
+
+6. Videconference!
     After booting Rails, point your browser to something like [http://localhost:3000/talking_stick/rooms](http://localhost:3000/talking_stick/rooms). From there you will be able to create and join rooms.
 
 For a better experience, we recommend also using [Bootstrap](http://getbootstrap.com). Easy installation of Bootstrap into Rails is available via [twitter-bootstrap-rails](https://github.com/seyhunak/twitter-bootstrap-rails).
