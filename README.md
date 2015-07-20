@@ -42,6 +42,12 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
     ```javascript
     //= require talking_stick/application
     ```
+    
+    And the following to your application's `assets/stylesheets/application.scss`:
+    
+    ```css
+    *= require talking_stick/application
+    ```
 
 5. **[optional]** Generate the default `participant` and `room` views which are then available for customization.  From your app's root directory:
 
