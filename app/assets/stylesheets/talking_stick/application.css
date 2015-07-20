@@ -39,6 +39,8 @@ body > .container-fluid > .row > [class^="col-xs-"]  {
 
 .modal #localvideo {
   max-height: 320px;
+  width: 100%;
+  max-width: none;
 }
 
 #partnervideos {
