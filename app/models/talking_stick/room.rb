@@ -10,6 +10,10 @@ module TalkingStick
       find_by(slug: slug) || create(name: slug.titleize, slug: slug)
     end
 
+    def to_param
+      slug || id
+    end
+
     private
 
     def sluggify_name
