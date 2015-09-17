@@ -18,17 +18,11 @@
     </div>
   </div>
   <div class="form-group">
-    <div class="field">
-      <p><%= f.label :last_used %></p>
-      <p><%= f.datetime_select :last_used, class: 'form-control' %></p>
-    </div>
-  </div>
-  <div class="form-group">
     <div id="form-submit-buttons" class="actions">
       <p><%= f.submit "Save", class: 'btn btn-success' %>
         <span><%= link_to 'Back', rooms_path, class: 'btn btn-default pull-right' %></span>
       </p>
     </div>
-    
+
   </div>
 <% end %>

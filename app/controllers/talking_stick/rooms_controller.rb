@@ -99,7 +99,7 @@ module TalkingStick
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_room
-        @room = Room.find(params[:id] || params[:room_id])
+        @room = Room.find_or_create(slug: (params[:id] || params[:room_id]))
       end
 
       def set_participant
