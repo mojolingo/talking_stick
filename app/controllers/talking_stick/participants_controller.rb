@@ -56,7 +56,7 @@ module TalkingStick
 
     private
       def set_room
-        @room = Room.find params[:room_id]
+        @room = Room.find_or_create(slug: (params[:id] || params[:room_id]))
       end
 
       # Use callbacks to share common setup or constraints between actions.
