@@ -7,11 +7,11 @@ module TalkingStick
 
     def self.find_or_create(slug:)
       slug = slug.parameterize
-      find_by(slug: slug) || find_by(id: slug) || create(name: slug.titleize, slug: slug)
+      find_by(slug: slug) || create(name: slug.titleize, slug: slug)
     end
 
     def to_param
-      slug || id
+      slug
     end
 
     private

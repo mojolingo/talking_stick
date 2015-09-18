@@ -27,20 +27,6 @@ module TalkingStick
         expect(described_class.count).to eq 1
       end
 
-      it "finds a room by ID if the slug is not found" do
-        existing = described_class.create(name: "")
-
-        expect(described_class.find_or_create(slug: existing.id.to_s)).to eq existing
-        expect(described_class.count).to eq 1
-      end
-
-      it "prefers the slug to ID if a slug matches a possible room ID" do
-        numeric_id = described_class.create(name: "")
-        numeric_slug = described_class.create(name: numeric_id.id.to_s)
-
-        expect(described_class.find_or_create(slug: numeric_slug.slug)).to eq numeric_slug
-      end
-
       it "creates a room if the slug doesn't exist" do
         expect {
           described_class.find_or_create(slug: "Test")
