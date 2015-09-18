@@ -17,7 +17,7 @@ module TalkingStick
     private
 
     def sluggify_name
-      self.slug = name.parameterize if !slug.present?
+      self.slug = name.parameterize unless slug.present?
     end
   end
 end
