@@ -12,6 +12,9 @@ module TalkingStick
 
     # GET /rooms/1
     def show
+      @room.last_used = Time.now
+      @room.save
+
       if params[:guid]
         if @participant = Participant.where(guid: params[:guid]).first
           @participant.last_seen = Time.now
