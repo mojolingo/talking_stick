@@ -9,7 +9,7 @@ This gem provides easy [WebRTC](https://webrtc.org) communication in any Rails a
 * Allow selecting audio or audio+video
 * Pluggable signaling delivery technology
 * Plug & Play functionality - works out of the box
-* Focus on simplicity at the API level, while maximizing the possibilites of integrating communication into existing Rails apps
+* Focus on simplicity at the API level, while maximizing the possibilities of integrating communication into existing Rails apps
 
 ## Installation
 
@@ -42,9 +42,9 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
     ```javascript
     //= require talking_stick/application
     ```
-    
+
     And the following to your application's `assets/stylesheets/application.scss`:
-    
+
     ```css
     *= require talking_stick/application
     ```
