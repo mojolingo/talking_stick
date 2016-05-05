@@ -81,7 +81,8 @@ module TalkingStick
     end
 
     def deliver_signals!
-      data = TalkingStick::Signal.where recipient: @participant
+      return unless @participant
+      data = TalkingStick::Signal.where recipient_id: @participant.id
 
       # Destroy the signals as we return them, since they have been delivered
       result = []

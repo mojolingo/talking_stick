@@ -12,7 +12,7 @@ module TalkingStick
 
     class << self
       def remove_stale!(room)
-        self.where(room: room).where('last_seen < ?', Time.now - 15.seconds).destroy_all
+        self.where(room_id: room.id).where('last_seen < ?', Time.now - 15.seconds).destroy_all
       end
     end
   end
