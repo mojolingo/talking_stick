@@ -1,3 +1,6 @@
+# develop
+* Support for Rails 3
+
 # [1.0.0](https://github.com/mojolingo/talking_stick/compare/v0.0.1...v1.0.0) - [2016-01-02](https://rubygems.org/gems/talking_stick/versions/1.0.0)
 * First stable version of Talking Stick - see [README](https://github.com/mojolingo/talking_stick/blob/v1.0.0/README.md) for details
 

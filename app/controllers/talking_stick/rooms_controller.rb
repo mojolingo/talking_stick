@@ -2,8 +2,8 @@ require_dependency "talking_stick/application_controller"
 
 module TalkingStick
   class RoomsController < ApplicationController
-    before_action :set_room, only: [:show, :edit, :update, :destroy, :signal]
-    before_action :set_participant, only: [:signal]
+    before_filter :set_room, only: [:show, :edit, :update, :destroy, :signal]
+    before_filter :set_participant, only: [:signal]
 
     # GET /rooms
     def index
@@ -81,7 +81,8 @@ module TalkingStick
     end
 
     def deliver_signals!
-      data = TalkingStick::Signal.where recipient: @participant
+      return unless @participant
+      data = TalkingStick::Signal.where recipient_id: @participant.id
 
       # Destroy the signals as we return them, since they have been delivered
       result = []
