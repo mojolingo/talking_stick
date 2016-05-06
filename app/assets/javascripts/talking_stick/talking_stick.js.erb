@@ -7,8 +7,8 @@ var TalkingStick = (function(self) {
   self.partners     = {};
   self._options = {
     media: { audio: true, video: true },
-    localVideo: '#localvideo',
-    partnerVideos: '#partnervideos',
+    localVideo: '#talking-stick-localvideo',
+    partnerVideos: '#talking-stick-partnervideos',
     connectionTimeout: 60000,
     logLevel: 'error',
     iceServers: [],
@@ -189,7 +189,7 @@ var TalkingStick = (function(self) {
   self.connect = function(name) {
     // Tell the server we're ready to start contacting the other participants
     var data = {
-      participant: {
+      talking_stick_participant: {
         guid: self.guid,
         name: name
       }

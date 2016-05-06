@@ -1,10 +1,10 @@
 <% content_for(:title) { "#{@room.name} Group Conversation" } %>
-<div class="container-fluid" role="main" id="room" data-room-name="<%= @room.name %>">
+<div class="container-fluid" role="main" id="talking-stick-room" data-room-name="<%= @room.name %>">
   <div class="row">
     <div class="col-xs-3">
       <div class="row">
         <div class="col-xs-12">
-          <div id="localvideo-container"></div>
+          <div id="talking-stick-localvideo-container"></div>
         </div>
         <div class="col-xs-12">
           <span class="navbar-brand"><%= @room.name %></span>
@@ -12,12 +12,12 @@
       </div>
     </div>
     <div class="col-xs-9">
-      <div id="partnervideos"></div>
+      <div id="talking-stick-partnervideos"></div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" role="dialog" id="video-preview">
+<div class="modal fade" role="dialog" id="talking-stick-video-preview">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -25,11 +25,11 @@
         <h3 class="modal-title"><%= t(:joining_room) %> "<%= @room.name %>"</h3>
       </div>
       <div class="modal-body">
-        <video id="localvideo" poster="<%= image_path 'talking_stick/line-spinner.svg' %>" autoplay=true></video>
-        <p id="preview_instructions"><%= t(:video_grant_access) %></p>
+        <video id="talking-stick-localvideo" poster="<%= image_path 'talking_stick/line-spinner.svg' %>" autoplay=true></video>
+        <p id="talking-stick-preview-instructions"><%= t(:video_grant_access) %></p>
       </div>
       <div class="modal-footer">
-        <button id="connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal" disabled>Join</button>
+        <button id="talking-stick-connect" type="button" class="btn btn-default btn-primary" data-dismiss="modal" disabled>Join</button>
         <%= link_to "Exit", "history.back()", class: 'btn btn-default' %>
       </div>
     </div><!-- /.modal-content -->
@@ -38,44 +38,43 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#sim').click(sim);
   // Attempt to keep the modal from scrolling vertically
   // 300px is the approximate height of the modal, minus the video
-  $('#video-preview').find('video').height($(window).height() - 300);
-  $('#video-preview').modal({backdrop: 'static', keyboard: false, show: true});
+  $('#talking-stick-video-preview').find('video').height($(window).height() - 300);
+  $('#talking-stick-video-preview').modal({backdrop: 'static', keyboard: false, show: true});
   var myGuid = TalkingStick.generateGUID();
   // Use the least-common-denominator, Rails API, for WebRTC setup
   var options = {
-    url: '<%= room_path %>',
+    url: '<%= talking_stick.room_path %>',
     myGuid: myGuid,
   };
   var signalingEngine = new TalkingStick.RailsSignaling(options);
 
   var options = {
     guid: myGuid,
-    roomUrl: '<%= room_path %>',
+    roomUrl: '<%= talking_stick.room_path %>',
     signalingEngine: signalingEngine,
     logLevel: 'trace',
   };
   TalkingStick.init(options);
 
-  $('#connect').click(startSession);
+  $('#talking-stick-connect').click(startSession);
   $(window).on('talking_stick.local_media_setup', function() {
-    $('#preview_instructions').html('<%= t(:video_intro) %>');
-    $('form#connect input[name="join"]').attr('disabled', false);
+    $('#talking-stick-preview-instructions').html('<%= t(:video_intro) %>');
+    $('#talking-stick-connect').attr('disabled', false);
   });
 });
 
 function startSession() {
-  $('#localvideo').detach().appendTo('#localvideo-container');
-  $('#localvideo').height('auto');
+  $('#talking-stick-localvideo').detach().appendTo('#talking-stick-localvideo-container');
+  $('#talking-stick-localvideo').height('auto');
   // Gotta restart and re-mute the video after moving it
-  $('#localvideo')[0].play();
+  $('#talking-stick-localvideo')[0].play();
   TalkingStick.connect();
 };
 
 function resizeVideos() {
-  var videoCollection = $('#partnervideos video');
+  var videoCollection = $('#talking-stick-partnervideos video');
   var numVideos = videoCollection.length;
   var square = Math.sqrt(numVideos);
   if (!isInt(square)) {
@@ -93,8 +92,8 @@ function cleanupPartner() {
 function sim() {
   var el = $(document.createElement('video'));
   el.attr('poster', "<%= image_path 'talking_stick/line-spinner.svg' %>");
-  $('#partnervideos').append(el);
-  TalkingStick.localVideo = $('#localvideo');
+  $('#talking-stick-partnervideos').append(el);
+  TalkingStick.localVideo = $('#talking-stick-localvideo');
   TalkingStick.trigger('partner.media', el);
 }
 
