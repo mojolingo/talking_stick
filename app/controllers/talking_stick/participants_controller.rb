@@ -31,7 +31,6 @@ module TalkingStick
 
       respond_to do |format|
         if @participant.save
-          format.html { redirect_to [@room, @participant], notice: 'Participant was successfully created.' }
           format.json { render json: @participant }
         else
           render :new
@@ -42,7 +41,7 @@ module TalkingStick
     # PATCH/PUT /participants/1
     def update
       if @participant.update(participant_params)
-        redirect_to [@room, @participant], notice: 'Participant was successfully updated.'
+        redirect_to talking_stick.room_path(@room), notice: 'Participant was successfully updated.'
       else
         render :edit
       end
@@ -51,7 +50,7 @@ module TalkingStick
     # DELETE /participants/1
     def destroy
       @participant.destroy
-      redirect_to participants_url, notice: 'Participant was successfully destroyed.'
+      redirect_to talking_stick.room_path(@room), notice: 'Participant was successfully destroyed.'
     end
 
     private
@@ -66,7 +65,7 @@ module TalkingStick
 
       # Only allow a trusted parameter "white list" through.
       def participant_params
-        params.require(:participant).permit(:name, :ip, :guid)
+        params.require(:talking_stick_participant).permit(:name, :ip, :guid)
       end
   end
 end

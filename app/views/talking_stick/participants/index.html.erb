@@ -17,7 +17,7 @@
         <td><%= participant.name %></td>
         <td><%= participant.ip %></td>
         <td><%= link_to 'Show', [@room, participant] %></td>
-        <td><%= link_to 'Edit', edit_room_participant_path(@room, participant) %></td>
+        <td><%= link_to 'Edit', talking_stick.edit_room_participant_path(@room, participant) %></td>
         <td><%= link_to 'Destroy', [@room, participant], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Participant', new_room_participant_path(@room) %>
+<%= link_to 'New Participant', talking_stick.new_room_participant_path(@room) %>

@@ -1,7 +1,7 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
 
-  <%= link_to t(:new_room), new_room_path, class: 'btn btn-success pull-right' %>
+  <%= link_to t(:new_room), talking_stick.new_room_path, class: 'btn btn-success pull-right' %>
 
   <h1><%= t(:listing_rooms) %></h1>
 
@@ -22,9 +22,9 @@
         <tr>
           <td><%= room.name %></td>
           <td><%= room.last_used.try(:strftime, "%b %d, %l:%M %P") || t(:last_used_never) %></td>
-          <td><%= link_to 'Enter', room %></td>
-          <td><%= link_to t(:edit), edit_room_path(room) %></td>
-          <td><%= link_to t(:destroy), room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to 'Enter', talking_stick.room_path(room) %></td>
+          <td><%= link_to t(:edit), talking_stick.edit_room_path(room) %></td>
+          <td><%= link_to t(:destroy), talking_stick.room_path(room), method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>

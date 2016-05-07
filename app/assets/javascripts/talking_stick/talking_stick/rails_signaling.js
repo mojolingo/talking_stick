@@ -2,7 +2,7 @@ TalkingStick.RailsSignaling = function(options) {
   this.options = options;
   this.roomUrl = options.url;
   var self = this;
-  $('#localvideo').on('talking_stick.connected', function() { self.connected.apply(self)} );
+  $('#talking-stick-localvideo').on('talking_stick.connected', function() { self.connected.apply(self)} );
 }
 
 TalkingStick.RailsSignaling.prototype.connected = function() {
@@ -12,7 +12,7 @@ TalkingStick.RailsSignaling.prototype.connected = function() {
   var pollingInterval = setInterval(function() {
     signaling._updateRoom.apply(signaling);
   }, 3000);
-  $('#localvideo').on('talking_stick.disconnected', function() { clearInterval(pollingInterval); });
+  $('#talking-stick-localvideo').on('talking_stick.disconnected', function() { clearInterval(pollingInterval); });
 }
 
 TalkingStick.RailsSignaling.prototype.sendICECandidate = function(to, candidate) {
