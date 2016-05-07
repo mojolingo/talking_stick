@@ -1,4 +1,6 @@
 # develop
+* *Breaking* HTML elements prefixed with `talking-stick-`
+* Improve ability to embed this engine into existing Rails applications by disabling `isolate_engine`
 * Support for Rails 3
 
 # [1.0.0](https://github.com/mojolingo/talking_stick/compare/v0.0.1...v1.0.0) - [2016-01-02](https://rubygems.org/gems/talking_stick/versions/1.0.0)
