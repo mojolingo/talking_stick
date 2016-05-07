@@ -33,7 +33,7 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
 3. Install and Run migration
     To add the required models to your application, the migrations must be copied and run:
     ```
-    $ rake railties:install:migrations db:migrate
+    $ rake talking_stick:install:migrations db:migrate
     ```
 
 4. Import Assets
