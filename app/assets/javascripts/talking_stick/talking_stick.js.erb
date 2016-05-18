@@ -135,7 +135,7 @@ var TalkingStick = (function(self) {
     self.localVideo[0].muted = true;
 
     self.log('debug', 'Requesting user consent to access to input devices');
-    getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
+    navigator.getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
   };
 
   self.muteAudio = function() {
