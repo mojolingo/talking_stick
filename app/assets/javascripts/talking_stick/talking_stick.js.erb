@@ -171,7 +171,7 @@ var TalkingStick = (function(self) {
     self.myStream = stream;
 
     // The JS API requires the raw DOM element, not a jQuery wrapper
-    attachMediaStream(self.localVideo[0], stream);
+    self.localVideo[0].srcObject = stream;
 
     self.trigger('local_media_setup');
   };
