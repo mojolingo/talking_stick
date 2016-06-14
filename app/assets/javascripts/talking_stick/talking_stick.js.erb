@@ -166,6 +166,16 @@ var TalkingStick = (function(self) {
     return !self.myStream.getVideoTracks()[0].enabled;
   }
 
+  self.toggleAudio = function () {
+    self.audioMuted() ? self.unmuteAudio() : self.muteAudio();
+    return self.audioMuted();
+  }
+
+  self.toggleVideo = function () {
+    self.videoMuted() ? self.unmuteVideo() : self.muteVideo();
+    return self.videoMuted();
+  }
+
   self._handleUserMedia = function(stream) {
     self.log('debug', 'User has granted access to input devices');
     self.myStream = stream;
