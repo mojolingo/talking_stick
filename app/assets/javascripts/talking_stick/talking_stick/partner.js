@@ -97,7 +97,7 @@ TalkingStick.Partner.prototype.handleOffer = function(offer) {
 TalkingStick.Partner.prototype.handleAnswer = function(answer) {
   this.log('debug', 'Processing Answer received from', this.guid);
   var self = this;
-  this.peerConnection.ontrack = function(event) {
+  this.peerConnection.onaddstream = function(event) {
     self._attachMediaStream(event.stream);
     self.connected = true;
   };
