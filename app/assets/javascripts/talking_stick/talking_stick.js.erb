@@ -83,7 +83,7 @@ var TalkingStick = (function(self) {
       // Make a copy of the data here so we can apply default labels
       var tsDevice = {
         id: "" + device.deviceId,
-        label: "" + device.label,
+        label: "" + (device.label || device.kind),
         facing: "" + device.facing,
         kind: "" + device.kind,
       }
