@@ -68,10 +68,10 @@ var TalkingStick = (function(self) {
   };
 
   self.detectDevices = function() {
-    if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.enumerateDevices === 'undefined') {
+    if (typeof navigator.mediaDevices === 'undefined' || typeof navigator.mediaDevices.enumerateDevices === 'undefined') {
       self.log('warning', 'MediaStreamTrack is not defined.  We will not be able to offer device selection.');
     } else {
-      MediaStreamTrack.enumerateDevices().then()(self.handleDevices);
+      navigator.mediaDevices.enumerateDevices().then(self.handleDevices);
     }
   };
 
