@@ -68,10 +68,10 @@ var TalkingStick = (function(self) {
   };
 
   self.detectDevices = function() {
-    if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.getSources === 'undefined') {
+    if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.enumerateDevices === 'undefined') {
       self.log('warning', 'MediaStreamTrack is not defined.  We will not be able to offer device selection.');
     } else {
-      MediaStreamTrack.getSources(self.handleDevices);
+      MediaStreamTrack.enumerateDevices().then()(self.handleDevices);
     }
   };
 
@@ -82,7 +82,7 @@ var TalkingStick = (function(self) {
       // Devices (SourceInfo) objects are read-only
       // Make a copy of the data here so we can apply default labels
       var tsDevice = {
-        id: "" + device.id,
+        id: "" + device.deviceId,
         label: "" + device.label,
         facing: "" + device.facing,
         kind: "" + device.kind,
