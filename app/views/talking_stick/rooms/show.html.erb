@@ -105,6 +105,9 @@ function isInt(value){
   }
 }
 
+$(window).on('talking_stick.new_partner', function(ev, partner) {
+  $('#talking-stick-partnervideos').append(partner.videoElement);
+};
 $(window).on('talking_stick.partner.media', resizeVideos);
 $(window).on('talking_stick.partner.cleanup', cleanupPartner);
 $(window).resize(resizeVideos);

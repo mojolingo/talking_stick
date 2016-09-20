@@ -68,10 +68,10 @@ var TalkingStick = (function(self) {
   };
 
   self.detectDevices = function() {
-    if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.getSources === 'undefined') {
+    if (typeof navigator.mediaDevices === 'undefined' || typeof navigator.mediaDevices.enumerateDevices === 'undefined') {
       self.log('warning', 'MediaStreamTrack is not defined.  We will not be able to offer device selection.');
     } else {
-      MediaStreamTrack.getSources(self.handleDevices);
+      navigator.mediaDevices.enumerateDevices().then(self.handleDevices);
     }
   };
 
@@ -82,8 +82,8 @@ var TalkingStick = (function(self) {
       // Devices (SourceInfo) objects are read-only
       // Make a copy of the data here so we can apply default labels
       var tsDevice = {
-        id: "" + device.id,
-        label: "" + device.label,
+        id: "" + device.deviceId,
+        label: "" + (device.label || device.kind),
         facing: "" + device.facing,
         kind: "" + device.kind,
       }
@@ -135,7 +135,7 @@ var TalkingStick = (function(self) {
     self.localVideo[0].muted = true;
 
     self.log('debug', 'Requesting user consent to access to input devices');
-    getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
+    navigator.getUserMedia(self._options.media, self._handleUserMedia, self._handleUserMediaFailure);
   };
 
   self.muteAudio = function() {
@@ -166,12 +166,22 @@ var TalkingStick = (function(self) {
     return !self.myStream.getVideoTracks()[0].enabled;
   }
 
+  self.toggleAudio = function () {
+    self.audioMuted() ? self.unmuteAudio() : self.muteAudio();
+    return self.audioMuted();
+  }
+
+  self.toggleVideo = function () {
+    self.videoMuted() ? self.unmuteVideo() : self.muteVideo();
+    return self.videoMuted();
+  }
+
   self._handleUserMedia = function(stream) {
     self.log('debug', 'User has granted access to input devices');
     self.myStream = stream;
 
     // The JS API requires the raw DOM element, not a jQuery wrapper
-    attachMediaStream(self.localVideo[0], stream);
+    self.localVideo[0].srcObject = stream;
 
     self.trigger('local_media_setup');
   };
