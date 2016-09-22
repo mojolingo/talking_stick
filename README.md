@@ -2,6 +2,7 @@
 
 This gem provides easy [WebRTC](https://webrtc.org) communication in any Rails app.
 
+[![Code Climate](https://codeclimate.com/github/mojolingo/talking_stick/badges/gpa.svg)](https://codeclimate.com/github/mojolingo/talking_stick)
 
 ## Goals
 
