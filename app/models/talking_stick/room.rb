@@ -1,5 +1,5 @@
 module TalkingStick
-  class Room < ActiveRecord::Base
+  class Room < ApplicationRecord
     has_many :participants, dependent: :destroy
     has_many :signals, dependent: :destroy
 
