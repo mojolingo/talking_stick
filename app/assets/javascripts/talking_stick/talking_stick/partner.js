@@ -105,9 +105,13 @@ TalkingStick.Partner.prototype.handleAnswer = function(answer) {
 };
 
 TalkingStick.Partner.prototype.handleRemoteICECandidate = function(candidate) {
+  var self = this;
   candidate = new RTCIceCandidate(candidate);
-  this.log('trace', 'Adding remote ICE candidate', candidate);
-  this.peerConnection.addIceCandidate(candidate);
+
+  this.peerConnection.addIceCandidate(candidate)
+    .then(function() { self.log('trace', 'Added remote ICE candidate', candidate) })
+    .catch(function(reason) { self.log('error', 'Error adding remote ICE candidate: ', reason) } )
+
 };
 
 TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
