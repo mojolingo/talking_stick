@@ -1,5 +1,5 @@
 module TalkingStick
-  class Participant < ActiveRecord::Base
+  class Participant < ApplicationRecord
     belongs_to :room
     has_many :signals_sent, class_name: 'Signal', foreign_key: 'sender_id', dependent: :destroy
     has_many :signals_received, class_name: 'Signal', foreign_key: 'recipient_id', dependent: :destroy

@@ -2,8 +2,8 @@ require_dependency "talking_stick/application_controller"
 
 module TalkingStick
   class RoomsController < ApplicationController
-    before_filter :set_room, only: [:show, :edit, :update, :destroy, :signal]
-    before_filter :set_participant, only: [:signal]
+    before_action :set_room, only: [:show, :edit, :update, :destroy, :signal]
+    before_action :set_participant, only: [:signal]
 
     # GET /rooms
     def index
