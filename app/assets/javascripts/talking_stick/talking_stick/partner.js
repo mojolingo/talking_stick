@@ -105,9 +105,13 @@ TalkingStick.Partner.prototype.handleAnswer = function(answer) {
 };
 
 TalkingStick.Partner.prototype.handleRemoteICECandidate = function(candidate) {
+  var self = this;
   candidate = new RTCIceCandidate(candidate);
-  this.log('trace', 'Adding remote ICE candidate', candidate);
-  this.peerConnection.addIceCandidate(candidate);
+
+  this.peerConnection.addIceCandidate(candidate)
+    .then(function() { self.log('trace', 'Added remote ICE candidate', candidate) })
+    .catch(function(reason) { self.log('error', 'Error adding remote ICE candidate: ', reason) } )
+
 };
 
 TalkingStick.Partner.prototype.handleLocalICECandidate = function(event) {
@@ -141,7 +145,8 @@ TalkingStick.Partner.prototype.disconnect = function() {
 
 TalkingStick.Partner.prototype._attachMediaStream = function(stream) {
   this.log('trace', 'Attaching media stream');
-  var el = attachMediaStream(this.videoElement[0], stream);
+  var el = this.videoElement[0];
+  el.srcObject = stream;
   if (el) {
     // Compatibility with Temasys plugin
     // See https://temasys.atlassian.net/wiki/display/TWPP/How+to+integrate+the+Temasys+WebRTC+Plugin+into+your+website - "Attach streams"
@@ -158,4 +163,3 @@ TalkingStick.Partner._checkForConnection = function() {
     this.trigger('connection_timeout');
   }
 };
-

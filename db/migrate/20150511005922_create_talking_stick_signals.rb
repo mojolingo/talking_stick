@@ -1,4 +1,4 @@
-class CreateTalkingStickSignals < ActiveRecord::Migration
+class CreateTalkingStickSignals < ActiveRecord::Migration[4.2]
   def change
     create_table :talking_stick_signals do |t|
       t.belongs_to :room

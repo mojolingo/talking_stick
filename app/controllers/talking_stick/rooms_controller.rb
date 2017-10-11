@@ -50,7 +50,7 @@ module TalkingStick
       @room = Room.new(room_params)
 
       if @room.save
-        redirect_to @room, notice: 'Room was successfully created.'
+        redirect_to talking_stick.room_path(@room), url: talking_stick.room_path(@room), notice: 'Room was successfully created.'
       else
         render :new
       end
@@ -59,7 +59,7 @@ module TalkingStick
     # PATCH/PUT /rooms/1
     def update
       if @room.update(room_params)
-        redirect_to @room, notice: 'Room was successfully updated.'
+        redirect_to talking_stick.room_path(@room), notice: 'Room was successfully updated.'
       else
         render :edit
       end
@@ -68,7 +68,7 @@ module TalkingStick
     # DELETE /rooms/1
     def destroy
       @room.destroy
-      redirect_to rooms_url, notice: 'Room was successfully destroyed.'
+      redirect_to talking_stick.rooms_url, notice: 'Room was successfully destroyed.'
     end
 
     def signal
@@ -81,7 +81,8 @@ module TalkingStick
     end
 
     def deliver_signals!
-      data = TalkingStick::Signal.where recipient: @participant
+      return [] unless @participant
+      data = TalkingStick::Signal.where recipient_id: @participant.id
 
       # Destroy the signals as we return them, since they have been delivered
       result = []
@@ -115,7 +116,7 @@ module TalkingStick
 
       # Only allow a trusted parameter "white list" through.
       def room_params
-        params.require(:room).permit(:name, :last_used)
+        params.require(:talking_stick_room).permit(:name, :last_used)
       end
 
       def signal_params

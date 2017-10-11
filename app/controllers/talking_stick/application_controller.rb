@@ -1,6 +1,5 @@
 module TalkingStick
-  class ApplicationController < ActionController::Base
-    layout 'application'
+  class ApplicationController < ::ApplicationController
     before_action :set_locale
 
     def set_locale

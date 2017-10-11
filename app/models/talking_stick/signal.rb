@@ -1,5 +1,5 @@
 module TalkingStick
-  class Signal < ActiveRecord::Base
+  class Signal < ApplicationRecord
     belongs_to :room
     belongs_to :sender, class_name: "TalkingStick::Participant"
     belongs_to :recipient, class_name: "TalkingStick::Participant"

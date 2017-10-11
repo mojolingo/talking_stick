@@ -2,6 +2,7 @@
 
 This gem provides easy [WebRTC](https://webrtc.org) communication in any Rails app.
 
+[![Code Climate](https://codeclimate.com/github/mojolingo/talking_stick/badges/gpa.svg)](https://codeclimate.com/github/mojolingo/talking_stick)
 
 ## Goals
 
@@ -33,7 +34,7 @@ TalkingStick is built as a Rails Engine, and so follows those conventions.
 3. Install and Run migration
     To add the required models to your application, the migrations must be copied and run:
     ```
-    $ rake railties:install:migrations db:migrate
+    $ rake talking_stick:install:migrations db:migrate
     ```
 
 4. Import Assets
@@ -139,8 +140,8 @@ The Talking Stick is a tradition among Native American (and other) cultures whic
 
 This project is licensed under the MIT License. This project incorporates [Adapter.js from the WebRTC.org team](https://github.com/webrtc/adapter), which is licensed under the Apache license.
 
-Copyright 2015 Mojo Lingo LLC
+Copyright 2015-2016 Mojo Lingo LLC
 
-Portions copyright 2014 The WebRTC project authors
+Portions copyright 2014-2016 The WebRTC project authors
 
 [Flikr2005](https://www.flickr.com/photos/flikr/371850310/) loading image courtesy Flickr user [Flikr](https://www.flickr.com/photos/flikr/)

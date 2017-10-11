@@ -1,4 +1,4 @@
-class CreateTalkingStickParticipants < ActiveRecord::Migration
+class CreateTalkingStickParticipants < ActiveRecord::Migration[4.2]
   def change
     create_table :talking_stick_participants do |t|
       t.string :name

@@ -1,4 +1,4 @@
-<%= form_for([@room, @participant]) do |f| %>
+<%= form_for([@room, @participant], path: talking_stick.room_participant_path(@room, @participant)) do |f| %>
   <% if @participant.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@participant.errors.count, "error") %> prohibited this participant from being saved:</h2>

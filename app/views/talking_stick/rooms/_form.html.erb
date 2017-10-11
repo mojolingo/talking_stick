@@ -1,4 +1,4 @@
-<%= form_for(@room) do |f| %>
+<%= form_for(@room, url: talking_stick.rooms_path) do |f| %>
   <% if @room.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
@@ -20,7 +20,7 @@
   <div class="form-group">
     <div id="form-submit-buttons" class="actions">
       <p><%= f.submit "Save", class: 'btn btn-success' %>
-        <span><%= link_to 'Back', rooms_path, class: 'btn btn-default pull-right' %></span>
+        <span><%= link_to 'Back', talking_stick.rooms_path, class: 'btn btn-default pull-right' %></span>
       </p>
     </div>
 

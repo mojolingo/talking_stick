@@ -1,3 +1,11 @@
+# develop
+
+# [2.0.0](https://github.com/mojolingo/talking_stick/compare/v1.0.0...v2.0.0) - [2017-10-11](https://rubygems.org/gems/talking_stick/versions/2.0.0)
+* *Breaking* HTML elements prefixed with `talking-stick-`
+* Improve ability to embed this engine into existing Rails applications by disabling `isolate_engine`
+* We dropped support for Rails < 4.2
+* Support for Rails 4.2 and Rails 5.0
+
 # [1.0.0](https://github.com/mojolingo/talking_stick/compare/v0.0.1...v1.0.0) - [2016-01-02](https://rubygems.org/gems/talking_stick/versions/1.0.0)
 * First stable version of Talking Stick - see [README](https://github.com/mojolingo/talking_stick/blob/v1.0.0/README.md) for details
 
