@@ -1,5 +1,8 @@
 # develop
 
+# [2.1.0](https://github.com/mojolingo/talking_stick/compare/v2.0.0...v2.1.0) - [2017-11-09](https://rubygems.org/gems/talking_stick/versions/2.1.0)
+* Support for Rails 5.1
+
 # [2.0.0](https://github.com/mojolingo/talking_stick/compare/v1.0.0...v2.0.0) - [2017-10-11](https://rubygems.org/gems/talking_stick/versions/2.0.0)
 * *Breaking* HTML elements prefixed with `talking-stick-`
 * Improve ability to embed this engine into existing Rails applications by disabling `isolate_engine`
